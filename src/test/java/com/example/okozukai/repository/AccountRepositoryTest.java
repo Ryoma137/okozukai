@@ -20,7 +20,7 @@ class AccountRepositoryTest {
 
     @Test
     @Sql("/test-schema-not-data-exist.sql")
-    @DisplayName("IDがNullの時に@IDがNullの時に@GeneratedValueでIDが正しく生成されること")
+    @DisplayName("IDがNullの時に@GeneratedValueでIDが正しく生成されること")
     void testGeneratedValue() {
 
         var account = new Account();
@@ -37,7 +37,7 @@ class AccountRepositoryTest {
 
         var actual = accountRepository.findAll();
 
-        assertEquals(1, actual.size(), "追加したデータのみがDBに保存されている");
+        assertEquals(1, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
         assertNotNull(actual.get(0).getId(), "DBに保存されたIDがnullではなく、IDが生成されている");
     }
 
@@ -57,14 +57,17 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         var actual = accountRepository.findAll();
 
-        assertEquals(1, actual.size(), "追加したデータのみがDBに保存されている");
-        assertEquals(account, actual.get(0), "追加したデータがレコードの1列目に保存されている");
+        assertEquals(1, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
+
     }
 
     @Test
     @Sql("/test-schema.sql")
-    @DisplayName("DBのテーブル内にデータが存在する時、DBのID列の最後尾にデータが追加されていること")
+    @DisplayName("DBのテーブル内にデータが存在する時、DBにデータが追加されていること")
     void testAddDataWhenDataExistInDB() {
+
+        var original = accountRepository.findAll();
+        assertEquals(3, original.size(), "データを与える前のDBに保存されているデータ数を確認");
 
         var account = new Account();
 
@@ -75,15 +78,16 @@ class AccountRepositoryTest {
 
         accountRepository.save(account);
         var actual = accountRepository.findAll();
-
-        assertNotNull(actual.get(3).getId(), "与えられたデータがDBのID列の最後尾に追加されていることを確認");
-        assertEquals(4, actual.size(), "既存のDBに保存されているデータ数に追加したデータ数を合わせたデータ数が取得される事を確認");
+        assertEquals(4, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
     }
 
     @Test
     @Sql("/test-schema.sql")
     @DisplayName("与えられたデータのキーと一致するデータがDBに存在しない時、DBが更新されず新たなデータとして登録されているかの確認")
     void testUpdateWhenDataNotContainsSameKeyWithGivenData() {
+
+        var original = accountRepository.findAll();
+        assertEquals(3, original.size(), "データを与える前のDBに保存されているデータ数を確認");
 
         var account = new Account();
 
@@ -96,8 +100,8 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         var actual = accountRepository.findAll();
 
-        assertNotNull(actual.get(3).getId(), "与えられたデータのキーが一致するデータがDBに存在しない時、与えられたデータでDBの更新ではなく、与えられたデータのキーで新たなデータが登録されているかの確認");
-        assertEquals(4, actual.size(), "データが与えられた後のDBに保存されているデータ数を確認");
+        assertEquals(4, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
+
     }
 
 }
