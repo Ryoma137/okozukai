@@ -1,7 +1,6 @@
 package com.example.okozukai.entity;
 
 
-import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Date;
-import java.sql.Time;
-import java.util.Timer;
 
 @Entity
 @Data
@@ -19,18 +16,15 @@ import java.util.Timer;
 public class Account {
 
     @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Date itemDate;
 
     private String item;
 
-    @NotNull
     private int income;
 
-    @NotNull
     private int expense;
 
     private String note;
