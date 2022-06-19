@@ -15,7 +15,11 @@ public class AccountBookService {
     public void registerIncome(AccountBookForm accountBookForm) {
 
         var account = new Account();
-
+        account.setId(null);
+        account.setItemDate(accountBookForm.getItemDate());
+        account.setItem(accountBookForm.getItem());
+        account.setIncome(accountBookForm.getPrice());
+        account.setNote(accountBookForm.getNote());
         accountRepository.save(account);
     }
 }
