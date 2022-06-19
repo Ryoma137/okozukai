@@ -23,7 +23,7 @@ class AccountBookServiceTest {
     AccountRepository accountRepository;
 
     @Test
-    @DisplayName("支出が0の時、与えられた収入データが、レコードに追加される")
+    @DisplayName("与えられた収入データ0の時、レコードに追加される")
     void testRegisterIncomeWithZeroValueExpense() {
 
         var original = accountRepository.findAll();
@@ -34,6 +34,7 @@ class AccountBookServiceTest {
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
+        accountBookForm.setPrice(0);
         accountBookForm.setNote("testNote");
 
         accountBookService.registerIncome(accountBookForm);
@@ -42,7 +43,7 @@ class AccountBookServiceTest {
         assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
     }
     @Test
-    @DisplayName("支出が0以外の時、与えられた収入データが、レコードに追加される")
+    @DisplayName("与えられた収入データが0以外の時、レコードに追加される")
     void testRegisterIncomeWithNonZeroValueExpense() {
 
         var original = accountRepository.findAll();
