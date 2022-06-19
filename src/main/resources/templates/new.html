@@ -9,12 +9,12 @@
 </div>
 
 <div class="ul-align-center">
-    <form action="#" th:action="@{/new}" th:object="${registerInfo}" method="post">
+    <form action="#" th:action="@{/account-book/new}" th:object="${registerInfo}" method="post">
         <ul>
             <li>
                 <span>日付</span>
                 <span>
-                <input type="date" th:field="*{itemDate}" />
+                <input type="date" th:field="*{itemDate}"/>
             </span>
             </li>
             <li>
@@ -32,11 +32,11 @@
             <li>
                 <span>備考</span>
                 <span>
-                <input type="text"/>
+                <input type="text" th:field="*{note}"/>
             </span>
             </li>
         </ul>
-        <button type="submit" class="calculateBtn btn-color-radius">登録</button>
+        <button type="submit">登録</button>
     </form>
 </div>
 
