@@ -11,9 +11,7 @@ public class AccountBookForm {
 
     private String item;
 
-    private int income;
-
-    private int expense;
+    private int price;
 
     private String note;
 

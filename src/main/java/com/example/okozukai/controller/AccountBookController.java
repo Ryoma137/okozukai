@@ -25,7 +25,7 @@ public class AccountBookController {
     public String registerIncome(@ModelAttribute("registerInfo") AccountBookForm accountBookForm) {
 
         accountBookService.registerIncome(accountBookForm);
-        return "account-book/new";
+        return "new";
 
     }
 

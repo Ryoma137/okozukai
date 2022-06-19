@@ -33,7 +33,7 @@ class AccountBookServiceTest {
         var accountBookForm = new AccountBookForm();
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
-        accountBookForm.setIncome(1000);
+        accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
         accountBookService.registerIncome(accountBookForm);
@@ -52,8 +52,7 @@ class AccountBookServiceTest {
         var accountBookForm = new AccountBookForm();
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
-        accountBookForm.setIncome(1000);
-        accountBookForm.setExpense(2000);
+        accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
         accountBookService.registerIncome(accountBookForm);
