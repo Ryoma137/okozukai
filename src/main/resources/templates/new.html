@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New</title>
+</head>
+<div class="title-container">
+    <h1>new</h1>
+</div>
+
+<div class="ul-align-center">
+    <form action="#" th:action="@{/new}" th:object="${registerInfo}" method="post">
+        <ul>
+            <li>
+                <span>日付</span>
+                <span>
+                <input type="date" th:field="*{item_date}" value="2022-06-01"/>
+            </span>
+            </li>
+            <li>
+                <span>内容</span>
+                <span>
+                <input type="text" th:field="*{item}" name="name"/>
+            </span>
+            </li>
+            <li>
+                <span>金額</span>
+                <span>
+                <input type="number" th:field="*{price}" required minlength="1"/>
+            </span>
+            </li>
+            <li>
+                <span>備考</span>
+                <span>
+                <input type="text"/>
+            </span>
+            </li>
+        </ul>
+        <button type="submit" class="calculateBtn btn-color-radius">登録</button>
+    </form>
+</div>
+
+</body>
+</html>
+
