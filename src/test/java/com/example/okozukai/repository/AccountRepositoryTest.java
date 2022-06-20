@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.stream.LongStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,7 +60,8 @@ class AccountRepositoryTest {
         var actual = accountRepository.findAll();
 
         assertEquals(1, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
-        assertNotNull(actual.get(0), "与えられたデータが存在することの確認");
+        assertNotNull(actual.get(0), "DBにデータが存在することの確認");
+        assertEquals(account, actual.get(0), "DBに存在してるデータが登録したデータであるかの確認");
 
     }
 
@@ -73,6 +76,7 @@ class AccountRepositoryTest {
         var account = new Account();
 
         account.setItemDate(Date.valueOf("2022-03-01"));
+        account.setItem("testItem");
         account.setExpense(1000);
         account.setIncome(1500);
         account.setNote("testNote");
@@ -80,7 +84,9 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         var actual = accountRepository.findAll();
         assertEquals(4, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
-        assertNotNull(actual.get(3), "与えられたデータが存在する事を確認");
+        var maxIdValue = LongStream.of(actual.get(0).getId(), actual.get(1).getId(), actual.get(2).getId(), actual.get(3).getId()).max().getAsLong();
+        assertNotNull(maxIdValue, "追加されたデータが存在している");
+
     }
 
     @Test
@@ -90,14 +96,12 @@ class AccountRepositoryTest {
 
         var original = accountRepository.findAll();
         assertEquals(3, original.size(), "データを与える前のDBに保存されているデータ数を確認");
-        assertNotNull(original.get(0).getId(),"データを与える前にID列の1番目にはすでにデータが保存されている事を確認");
-        assertNotNull(original.get(1).getId(),"データを与える前にID列の2番目にはすでにデータが保存されている事を確認");
-        assertNotNull(original.get(2).getId(),"データを与える前にID列の3番目にはすでにデータが保存されている事を確認");
 
         var account = new Account();
 
         account.setId(5L);
         account.setItemDate(Date.valueOf("2022-03-01"));
+        account.setItem("testItem");
         account.setExpense(1000);
         account.setIncome(1500);
         account.setNote("testNote");
@@ -106,7 +110,13 @@ class AccountRepositoryTest {
         var actual = accountRepository.findAll();
 
         assertEquals(4, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
-        assertNotNull(actual.get(3).getId(),"データを与えた後にID列の4番目にデータが保存されている事を確認");
+
+        var maxIdValue = LongStream.of(actual.get(0).getId(), actual.get(1).getId(), actual.get(2).getId(), actual.get(3).getId()).max().getAsLong();
+        assertNotNull(maxIdValue, "追加されたデータにIDの最大値が付与されて存在することの確認");
+
+        assertTrue(Arrays.asList(actual.get(0)).contains(original.get(0)), "既存のデータが更新されていない事を確認");
+        assertTrue(Arrays.asList(actual.get(1)).contains(original.get(1)), "既存のデータが更新されていない事を確認");
+        assertTrue(Arrays.asList(actual.get(2)).contains(original.get(2)), "既存のデータが更新されていない事を確認");
 
     }
 
