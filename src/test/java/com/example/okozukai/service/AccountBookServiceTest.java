@@ -27,29 +27,10 @@ class AccountBookServiceTest {
     @Autowired
     AccountRepository accountRepository;
 
-    @Test
-    @DisplayName("与えられた収入データ0の時、レコードに追加される")
-    void testRegisterIncomeWithZeroValueExpense() {
-
-        var original = accountRepository.findAll();
-        assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
-
-
-        var accountBookForm = new AccountBookForm();
-        accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
-        accountBookForm.setItem("testItem");
-        accountBookForm.setPrice(0);
-        accountBookForm.setNote("testNote");
-
-        accountBookService.registerIncome(accountBookForm);
-
-        var actual = accountRepository.findAll();
-        assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
-    }
 
     @Test
-    @DisplayName("与えられた収入データが0以外の時、レコードに追加される")
-    void testRegisterIncomeWithNonZeroValueExpense() {
+    @DisplayName("引数(accountBookForm)で受け取った情報がAccountインスタンスに格納されてレコードに追加される")
+    void testRegisterIncomeDataPassedThroughParameter() {
 
         var original = accountRepository.findAll();
         assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
@@ -68,19 +49,24 @@ class AccountBookServiceTest {
         account.setIncome(accountBookForm.getPrice());
         account.setNote(accountBookForm.getNote());
 
-        assertEquals(Date.valueOf("2022-03-01"), account.getItemDate(), "引数で受け取った日付の値がAccountのインスタンスの内容の日付に格納されているかの確認");
-        assertEquals("testItem", account.getItem(), "引数で受け取った内容の値がAccountのインスタンスの内容に格納されているかの確認");
-        assertEquals(1000, accountBookForm.getPrice(), "引数で受け取った値段の値がAccountのインスタンスの収入値に格納されているかの確認");
-        assertEquals("testNote", accountBookForm.getNote(), "引数で受け取った備考の値がAccountのインスタンスの備考値に格納されているかの確認");
+        assertEquals(Date.valueOf("2022-03-01"), account.getItemDate(), "引数(accountBookForm)で受け取った日付の値がAccountのインスタンスの内容の日付に格納されているかの確認");
+        assertEquals("testItem", account.getItem(), "引数(accountBookForm)で受け取った内容の値がAccountのインスタンスの内容に格納されているかの確認");
+        assertEquals(1000, accountBookForm.getPrice(), "引数(accountBookForm)で受け取った値段の値がAccountのインスタンスの収入値に格納されているかの確認");
+        assertEquals("testNote", accountBookForm.getNote(), "引数(accountBookForm)で受け取った備考の値がAccountのインスタンスの備考値に格納されているかの確認");
 
 
         accountBookService.registerIncome(accountBookForm);
 
         var actual = accountRepository.findAll();
-
-
         assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
 
+
+        var saveAccount= accountRepository.save(account);
+
+        assertEquals(accountBookForm.getItemDate(),saveAccount.getItemDate(),"引数(accountBookForm)で受け取った日付の値が日付値としてDBに保存されているかの確認");
+        assertEquals(accountBookForm.getItem(),saveAccount.getItem(),"引数(accountBookForm)で受け取った内容の値が内容値としてDBに保存されているかの確認");
+        assertEquals(accountBookForm.getPrice(),saveAccount.getIncome(),"引数(accountBookForm)で受け取った日付の値が収入値としてDBに保存されているかの確認");
+        assertEquals(accountBookForm.getNote(),saveAccount.getNote(),"引数(accountBookForm)で受け取った備考の値が備考値としてDBに保存されているかの確認");
 
     }
 
