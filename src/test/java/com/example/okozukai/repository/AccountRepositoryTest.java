@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -114,9 +114,9 @@ class AccountRepositoryTest {
         var maxIdValue = LongStream.of(actual.get(0).getId(), actual.get(1).getId(), actual.get(2).getId(), actual.get(3).getId()).max().getAsLong();
         assertNotNull(maxIdValue, "追加されたデータにIDの最大値が付与されて存在することの確認");
 
-        assertTrue(Arrays.asList(actual.get(0)).contains(original.get(0)), "既存のデータが更新されていない事を確認");
-        assertTrue(Arrays.asList(actual.get(1)).contains(original.get(1)), "既存のデータが更新されていない事を確認");
-        assertTrue(Arrays.asList(actual.get(2)).contains(original.get(2)), "既存のデータが更新されていない事を確認");
+        assertTrue(Stream.of(actual.get(0), actual.get(1), actual.get(2), actual.get(3)).anyMatch(s -> s.equals(original.get(0))), "既存のデータが変更されていないか確認");
+        assertTrue(Stream.of(actual.get(0), actual.get(1), actual.get(2), actual.get(3)).anyMatch(s -> s.equals(original.get(1))), "既存のデータが変更されていないか確認");
+        assertTrue(Stream.of(actual.get(0), actual.get(1), actual.get(2), actual.get(3)).anyMatch(s -> s.equals(original.get(2))), "既存のデータが変更されていないか確認");
 
     }
 
