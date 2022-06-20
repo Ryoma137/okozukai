@@ -146,6 +146,4 @@ class AccountBookServiceTest {
         assertEquals(accountBookForm.getNote(), saveAccount.getNote(), "引数(accountBookForm)で受け取った備考の値が備考値としてDBに保存されているかの確認");
 
     }
-
-
 }
