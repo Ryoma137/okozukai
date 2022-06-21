@@ -7,6 +7,10 @@ import java.sql.Date;
 @Data
 public class AccountBookForm {
 
+    private boolean income;
+
+    private boolean expense;
+
     private Date itemDate;
 
     private String item;
