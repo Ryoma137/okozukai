@@ -108,47 +108,4 @@ class AccountBookServiceTest {
         assertEquals(accountBookForm.getNote(), accountValueWithMaxId.getNote(), "引数(accountBookForm)で受け取った備考の値が備考値としてDBに保存されているかの確認");
 
     }
-
-    @Test
-    @DisplayName("引数(accountBookForm)で受け取った価格情報がAccountインスタンスの支出、収入の両方に格納された場合、レコードに追加される")
-    void testRegisterIncomeDataPassedThroughParameterWithExpense() {
-
-        var original = accountRepository.findAll();
-        assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
-
-        var accountBookForm = new AccountBookForm();
-        accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
-        accountBookForm.setItem("testItem");
-        accountBookForm.setPrice(1000);
-        accountBookForm.setNote("testNote");
-
-        var account = new Account();
-        account.setId(null);
-        account.setItemDate(accountBookForm.getItemDate());
-        account.setItem(accountBookForm.getItem());
-        account.setIncome(accountBookForm.getPrice());
-        account.setExpense(accountBookForm.getPrice());
-        account.setNote(accountBookForm.getNote());
-
-        assertEquals(Date.valueOf("2022-03-01"), account.getItemDate(), "引数(accountBookForm)で受け取った日付の値がAccountのインスタンスの内容の日付に格納されているかの確認");
-        assertEquals("testItem", account.getItem(), "引数(accountBookForm)で受け取った内容の値がAccountのインスタンスの内容に格納されているかの確認");
-        assertEquals(1000, account.getIncome(), "引数(accountBookForm)で受け取った値段の値がAccountのインスタンスの収入値に格納されているかの確認");
-        assertEquals(1000, account.getExpense(), "引数(accountBookForm)で受け取った値段の値がAccountのインスタンスの支出値に格納されているかの確認");
-        assertEquals("testNote", accountBookForm.getNote(), "引数(accountBookForm)で受け取った備考の値がAccountのインスタンスの備考値に格納されているかの確認");
-
-        accountBookService.registerIncome(accountBookForm);
-
-        var actual = accountRepository.findAll();
-
-        assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
-        var accountValueWithMaxId = actual.stream().max(Comparator.comparing(Account::getId)).orElseGet(Assertions::fail);
-        assertNotNull(accountValueWithMaxId, "追加したデータが存在しているかの確認");
-
-        assertEquals(accountBookForm.getItemDate(), accountValueWithMaxId.getItemDate(), "引数(accountBookForm)で受け取った日付の値が日付値としてDBに保存されているかの確認");
-        assertEquals(accountBookForm.getItem(), accountValueWithMaxId.getItem(), "引数(accountBookForm)で受け取った内容の値が内容値としてDBに保存されているかの確認");
-        assertEquals(accountBookForm.getPrice(), accountValueWithMaxId.getIncome(), "引数(accountBookForm)で受け取った日付の値が収入値としてDBに保存されているかの確認");
-        assertNotEquals(accountBookForm.getPrice(), accountValueWithMaxId.getExpense(), "引数(accountBookForm)で受け取った日付の値が支出値としてDBに保存されているかの確認");
-        assertEquals(accountBookForm.getNote(), accountValueWithMaxId.getNote(), "引数(accountBookForm)で受け取った備考の値が備考値としてDBに保存されているかの確認");
-
-    }
 }
