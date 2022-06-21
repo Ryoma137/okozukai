@@ -1,6 +1,7 @@
 package com.example.okozukai.repository;
 
 import com.example.okozukai.entity.Account;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.sql.Date;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,8 +85,10 @@ class AccountRepositoryTest {
         accountRepository.save(account);
         var actual = accountRepository.findAll();
         assertEquals(4, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
-        var maxIdValue = LongStream.of(actual.get(0).getId(), actual.get(1).getId(), actual.get(2).getId(), actual.get(3).getId()).max().getAsLong();
-        assertNotNull(maxIdValue, "追加されたデータが存在している");
+        var maxIdValue = actual.stream().max(Comparator.comparing(Account::getId)).orElseGet(Assertions::fail);
+
+        assertNotNull(maxIdValue, "追加されたデータが存在することの確認");
+        assertEquals(account, maxIdValue, "追加したデータがDBに登録されているかの確認");
 
     }
 
@@ -111,12 +114,23 @@ class AccountRepositoryTest {
 
         assertEquals(4, actual.size(), "データを与えた後のDBに保存されているデータ数を確認");
 
-        var maxIdValue = LongStream.of(actual.get(0).getId(), actual.get(1).getId(), actual.get(2).getId(), actual.get(3).getId()).max().getAsLong();
-        assertNotNull(maxIdValue, "追加されたデータにIDの最大値が付与されて存在することの確認");
+        var maxIdValue = actual.stream().max(Comparator.comparing(Account::getId)).orElseGet(Assertions::fail);
 
-        assertTrue(Stream.of(actual.get(0), actual.get(1), actual.get(2), actual.get(3)).anyMatch(s -> s.equals(original.get(0))), "既存のデータが変更されていないか確認");
-        assertTrue(Stream.of(actual.get(0), actual.get(1), actual.get(2), actual.get(3)).anyMatch(s -> s.equals(original.get(1))), "既存のデータが変更されていないか確認");
-        assertTrue(Stream.of(actual.get(0), actual.get(1), actual.get(2), actual.get(3)).anyMatch(s -> s.equals(original.get(2))), "既存のデータが変更されていないか確認");
+        assertNotNull(maxIdValue, "追加されたデータが存在することの確認");
+        assertEquals(4, maxIdValue.getId(), "追加したデータのキーがDBのID列を利用したIDに変更されている事を確認");
+        assertEquals(account.getItemDate(), maxIdValue.getItemDate(), "追加したデータの日付が登録されている事を確認");
+        assertEquals(account.getItem(), maxIdValue.getItem(), "追加したデータの内容が登録されている事を確認");
+        assertEquals(account.getExpense(), maxIdValue.getExpense(), "追加したデータの支出が登録されている事を確認");
+        assertEquals(account.getIncome(), maxIdValue.getIncome(), "追加したデータの収入が登録されている事を確認");
+        assertEquals(account.getNote(), maxIdValue.getNote(), "追加したデータの内容が登録されている事を確認");
+
+        var recordsWithoutAddedOne = actual.stream().limit(3L).toList();
+
+        assertEquals(original.stream().map(Account::getItemDate).toList(), recordsWithoutAddedOne.stream().map(Account::getItemDate).collect(Collectors.toList()), "既存データのitemDateの値が変更されていない事を確認");
+        assertEquals(original.stream().map(Account::getItem).collect(Collectors.toList()), recordsWithoutAddedOne.stream().map(Account::getItem).collect(Collectors.toList()), "既存データのitemの値が変更されていない事を確認");
+        assertEquals(original.stream().map(Account::getIncome).toList(), recordsWithoutAddedOne.stream().map(Account::getIncome).toList(), "既存データのincomeの値が変更されていない事を確認");
+        assertEquals(original.stream().map(Account::getExpense).toList(), recordsWithoutAddedOne.stream().map(Account::getExpense).toList(), "既存データのexpenseの値が変更されていない事を確認");
+        assertEquals(original.stream().map(Account::getNote).toList(), recordsWithoutAddedOne.stream().map(Account::getNote).toList(), "既存データのnoteの値が変更されていない事を確認");
 
     }
 
