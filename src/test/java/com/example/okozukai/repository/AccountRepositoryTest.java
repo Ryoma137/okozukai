@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.sql.Date;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -123,10 +124,11 @@ class AccountRepositoryTest {
         assertEquals(account.getIncome(), accountValueWithMaxId.getIncome(), "追加したデータの収入が登録されている事を確認");
         assertEquals(account.getNote(), accountValueWithMaxId.getNote(), "追加したデータの内容が登録されている事を確認");
 
-        assertEquals(3, actual.stream().filter(accountValue -> accountValue.getId() != 4).toList().size(), "追加したデータを除いたデータ数が３である事の確認");
-        assertTrue(original.contains(actual.get(0)), "ID値が1であるデータはデータ追加前にも存在していることの確認");
-        assertTrue(original.contains(actual.get(1)), "ID値が2であるデータはデータ追加前にも存在していることの確認");
-        assertTrue(original.contains(actual.get(2)), "ID値が3であるデータはデータ追加前にも存在していることの確認");
+        var recordsWithoutAddedOne = actual.stream().filter(accountValue -> accountValue.getId() != 4).toList();
+        assertTrue(original.contains(recordsWithoutAddedOne.get(0)), "ID値が1であるデータはデータ追加前にも存在していることの確認");
+        assertTrue(original.contains(recordsWithoutAddedOne.get(1)), "ID値が2であるデータはデータ追加前にも存在していることの確認");
+        assertTrue(original.contains(recordsWithoutAddedOne.get(2)), "ID値が3であるデータはデータ追加前にも存在していることの確認");
 
     }
+
 }
