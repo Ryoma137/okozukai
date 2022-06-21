@@ -15,7 +15,7 @@ public class AccountBookForm {
 
     private String item;
 
-    private int price; //No.4 のタスクで追加済
+    private int price;
 
     private String note;
 
