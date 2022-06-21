@@ -125,9 +125,9 @@ class AccountRepositoryTest {
         assertEquals(account.getNote(), accountValueWithMaxId.getNote(), "追加したデータの内容が登録されている事を確認");
 
         var recordsWithoutAddedOne = actual.stream().filter(accountValue -> accountValue.getId() != 4).toList();
-        assertTrue(original.contains(recordsWithoutAddedOne.get(0)), "ID値が1であるデータはデータ追加前にも存在していることの確認");
-        assertTrue(original.contains(recordsWithoutAddedOne.get(1)), "ID値が2であるデータはデータ追加前にも存在していることの確認");
-        assertTrue(original.contains(recordsWithoutAddedOne.get(2)), "ID値が3であるデータはデータ追加前にも存在していることの確認");
+        assertTrue(original.contains(recordsWithoutAddedOne.get(0)), "1件目のデータが追加前と変わらないこと");
+        assertTrue(original.contains(recordsWithoutAddedOne.get(1)), "2件目のデータが追加前と変わらないこと");
+        assertTrue(original.contains(recordsWithoutAddedOne.get(2)), "3件目のデータが追加前と変わらないこと");
 
     }
 
