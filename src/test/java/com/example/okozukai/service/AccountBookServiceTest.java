@@ -11,7 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -87,15 +88,6 @@ class AccountBookServiceTest {
     @DisplayName("registerIncome_既存データあり_データが追加され既存データに変更なし")
     void testRegisterIncome1() {
 
-
-        // 1. DBに入っているデータを {Key: Id, Value: Account} のMap形式で保持する
-        // 2. テスト対象メソッドにわたす値の生成
-        // 3. テスト対象実行
-        // 4. DBに入っているデータを {Key: Id, Value: Account} のMap形式で保持する
-        // 5. 1.で取得したMapのデータが5.で取得したMapに存在していて、Valueの値も一致していること
-        // 6. 4.で取得したMapに新しいIDをもつ値が存在していて、Valueの値が2.で生成した値と一致していること
-
-
         var original = accountRepository.findAll();
         assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
 
@@ -116,5 +108,14 @@ class AccountBookServiceTest {
 
         assertTrue(originalMap.entrySet().stream().allMatch(e -> e.getValue().equals(actualMap.get(e.getKey()))), "データを与える後に取得したMapにデータを与える前に取得したMapのデータが含まれている");
 
+        var addedRecord = actualMap.entrySet().stream().sorted(Map.Entry.<Long, Account>comparingByKey().reversed()).findFirst().orElseGet(Assertions::fail);
+
+        assertNotNull(addedRecord, "最大値(最後に追加したデータ)のIDを持つデータが存在しているかを確認する");
+
+        assertEquals(accountBookForm.getItemDate(), addedRecord.getValue().getItemDate(), "与えられたデータの日付値とValueの日付の値が一致している");
+        assertEquals(accountBookForm.getItem(), addedRecord.getValue().getItem(), "与えられたデータの内容値とValueの内容の値が一致している");
+        assertEquals(accountBookForm.getPrice(), addedRecord.getValue().getIncome(), "与えられたデータの値段値とValueの収入の値が一致している");
+        assertEquals(accountBookForm.getNote(), addedRecord.getValue().getNote(), "与えられたデータの備考値とValueの備考の値が一致している");
+        
     }
 }
