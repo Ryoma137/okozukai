@@ -10,16 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AccountBookServiceTest {
@@ -118,6 +113,8 @@ class AccountBookServiceTest {
         assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
 
         Map<Long, Account> actualMap = actual.stream().collect(Collectors.toMap(Account::getId, account -> account));
+
+        assertTrue(originalMap.entrySet().stream().allMatch(e -> e.getValue().equals(actualMap.get(e.getKey()))), "データを与える後に取得したMapにデータを与える前に取得したMapのデータが含まれている");
 
     }
 }
