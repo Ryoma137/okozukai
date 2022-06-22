@@ -10,8 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -79,6 +84,40 @@ class AccountBookServiceTest {
         assertEquals(accountBookForm.getItem(), actual.get(0).getItem(), "引数(accountBookForm)で受け取った内容の値が内容値としてDBに保存されているかの確認");
         assertEquals(accountBookForm.getPrice(), actual.get(0).getIncome(), "引数(accountBookForm)で受け取った日付の値が収入値としてDBに保存されているかの確認");
         assertEquals(accountBookForm.getNote(), actual.get(0).getNote(), "引数(accountBookForm)で受け取った備考の値が備考値としてDBに保存されているかの確認");
+
+    }
+
+    @Test
+    @Sql("/test-schema.sql")
+    @DisplayName("registerIncome_既存データあり_データが追加され既存データに変更なし")
+    void testRegisterIncome1() {
+
+
+        // 1. DBに入っているデータを {Key: Id, Value: Account} のMap形式で保持する
+        // 2. テスト対象メソッドにわたす値の生成
+        // 3. テスト対象実行
+        // 4. DBに入っているデータを {Key: Id, Value: Account} のMap形式で保持する
+        // 5. 1.で取得したMapのデータが5.で取得したMapに存在していて、Valueの値も一致していること
+        // 6. 4.で取得したMapに新しいIDをもつ値が存在していて、Valueの値が2.で生成した値と一致していること
+
+
+        var original = accountRepository.findAll();
+        assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
+
+        Map<Long, Account> originalMap = original.stream().collect(Collectors.toMap(Account::getId, account -> account));
+
+        var accountBookForm = new AccountBookForm();
+        accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
+        accountBookForm.setItem("testItem");
+        accountBookForm.setPrice(1000);
+        accountBookForm.setNote("testNote");
+
+        accountBookService.registerIncome(accountBookForm);
+
+        var actual = accountRepository.findAll();
+        assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
+
+        Map<Long, Account> actualMap = actual.stream().collect(Collectors.toMap(Account::getId, account -> account));
 
     }
 }
