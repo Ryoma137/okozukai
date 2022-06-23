@@ -7,9 +7,7 @@ import java.sql.Date;
 @Data
 public class AccountBookForm {
 
-    private boolean income;
-
-    private boolean expense;
+    private String priceRadio;
 
     private Date itemDate;
 
