@@ -22,7 +22,7 @@ public class AccountBookController {
     }
 
     @PostMapping("/account-book/new")
-    public String registerIncome(@ModelAttribute("registerInfo") AccountBookForm accountBookForm) {
+    public String registerInfo(@ModelAttribute("registerInfo") AccountBookForm accountBookForm) {
 
         if (accountBookForm.getPriceRadio().equals("income")) {
             accountBookService.registerIncome(accountBookForm);
