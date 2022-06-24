@@ -174,4 +174,34 @@ class AccountBookServiceTest {
         assertEquals(accountBookForm.getNote(), addedRecord.getValue().getNote(), "与えられたデータの備考値とValueの備考の値が一致している");
 
     }
+
+    @Test
+    @Sql("/test-schema.sql")
+    @DisplayName("")
+    void testCallGetFindAllFunction() {
+
+        var actual = accountBookService.getFindAll();
+        actual.sort(Comparator.comparing(Account::getItemDate).reversed());
+
+        assertNotNull(actual, "取得したデータがnullではないことの確認");
+        assertEquals(3, actual.size(), "DBに保存されているデータ数のデータが取得できていることの確認");
+
+        assertEquals(Date.valueOf("2022-02-04"), actual.get(0).getItemDate(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals("Green Curry", actual.get(0).getItem(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals(500, actual.get(0).getIncome(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals(900, actual.get(0).getExpense(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals("Thai Cuisine", actual.get(0).getNote(), "取得したデータが日付の降順に並んでいるかを確認");
+
+        assertEquals(Date.valueOf("2022-02-03"), actual.get(1).getItemDate(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals("iPhone", actual.get(1).getItem(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals(130000, actual.get(1).getIncome(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals(140000, actual.get(1).getExpense(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals("iPhone 13 Pro", actual.get(1).getNote(), "取得したデータが日付の降順に並んでいるかを確認");
+
+        assertEquals(Date.valueOf("2022-02-02"), actual.get(2).getItemDate(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals("T-Shirts", actual.get(2).getItem(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals(1000, actual.get(2).getIncome(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals(1500, actual.get(2).getExpense(), "取得したデータが日付の降順に並んでいるかを確認");
+        assertEquals("Uniqlo T-Shirt", actual.get(2).getNote(), "取得したデータが日付の降順に並んでいるかを確認");
+    }
 }
