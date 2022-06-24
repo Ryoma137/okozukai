@@ -10,7 +10,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.sql.Date;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +18,6 @@ class AccountRepositoryTest {
 
     @Autowired
     AccountRepository accountRepository;
-
 
     @Test
     @Sql("/test-schema-not-data-exist.sql")
@@ -131,4 +129,54 @@ class AccountRepositoryTest {
 
     }
 
+    @Sql("/test-schema-not-data-exist.sql")
+    @Test
+    @DisplayName("DBのテーブル内にデータが存在しない時、空の配列を取得することを確認")
+    void testFindAllWhenDataNotExistInDB() {
+
+        var actual = accountRepository.findAll();
+        assertTrue(actual.isEmpty(), "DBにデータがない時、空の配列を取得する");
+    }
+
+    @Sql("/test-schema-not-data-exist.sql")
+    @Test
+    @DisplayName("DBのテーブル内にデータが存在する時、DBのテーブル内にあるデータが全て取得されることを確認")
+    void testFindAllWhenDataExistsInDB() {
+
+        var original = accountRepository.findAll();
+        assertTrue(original.isEmpty(), "DBにデータがない時、空のデータを取得する");
+
+        var account = new Account();
+        account.setItemDate(Date.valueOf("2022-03-01"));
+        account.setItem("testItem");
+        account.setExpense(1000);
+        account.setIncome(1500);
+        account.setNote("testNote");
+
+        var account2 = new Account();
+        account2.setItemDate(Date.valueOf("2022-04-01"));
+        account2.setItem("testItem2");
+        account2.setExpense(2000);
+        account2.setIncome(2500);
+        account2.setNote("testNote2");
+
+        var account3 = new Account();
+        account3.setItemDate(Date.valueOf("2022-05-01"));
+        account3.setItem("testItem3");
+        account3.setExpense(3000);
+        account3.setIncome(3500);
+        account3.setNote("testNote3");
+
+        accountRepository.save(account);
+        accountRepository.save(account2);
+        accountRepository.save(account3);
+
+        var actual = accountRepository.findAll();
+
+        assertEquals(3, actual.size(), "DBに登録されているデータ数の確認");
+        assertTrue(actual.contains(account), "DBに保存されているデータが取得できている");
+        assertTrue(actual.contains(account2), "DBに保存されているデータが取得できている");
+        assertTrue(actual.contains(account3), "DBに保存されているデータが取得できている");
+
+    }
 }
