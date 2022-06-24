@@ -12,9 +12,9 @@
     <form action="#" th:action="@{/account-book/new}" th:object="${registerInfo}" method="post">
         <ul>
             <li>
-                <input type="radio" th:field="*{priceRadio}" value="income">
+                <input type="radio" th:field="*{priceType}" value="income">
                 <label th:text="収入"/>
-                <input type="radio" th:field="*{priceRadio}" value="expense">
+                <input type="radio" th:field="*{priceType}" value="expense">
                 <label th:text="支出"/>
             </li>
             <li>

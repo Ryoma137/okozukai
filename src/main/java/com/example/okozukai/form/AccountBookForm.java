@@ -7,7 +7,7 @@ import java.sql.Date;
 @Data
 public class AccountBookForm {
 
-    private String priceRadio;
+    private String priceType;
 
     private Date itemDate;
 
