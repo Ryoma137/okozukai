@@ -31,4 +31,12 @@ public class AccountBookController {
         }
         return "/new";
     }
+
+    @GetMapping("/account-book")
+    public String getTopPage() {
+
+        accountBookService.getFindAll();
+        return "/account-book";
+    }
+
 }
