@@ -22,12 +22,13 @@ public class AccountBookController {
     }
 
     @PostMapping("/account-book/new")
-    public String registerIncome(@ModelAttribute("registerInfo") AccountBookForm accountBookForm) {
+    public String registerInfo(@ModelAttribute("registerInfo") AccountBookForm accountBookForm) {
 
-        accountBookService.registerIncome(accountBookForm);
+        if (accountBookForm.getPriceType().equals("income")) {
+            accountBookService.registerIncome(accountBookForm);
+        } else if (accountBookForm.getPriceType().equals("expense")) {
+            accountBookService.registerExpense(accountBookForm);
+        }
         return "/new";
-
     }
-
-
 }

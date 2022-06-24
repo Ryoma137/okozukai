@@ -22,4 +22,17 @@ public class AccountBookService {
         account.setNote(accountBookForm.getNote());
         accountRepository.save(account);
     }
+
+    public void registerExpense(AccountBookForm accountBookForm) {
+
+        var account = new Account();
+        account.setId(null);
+        account.setItemDate(accountBookForm.getItemDate());
+        account.setItem(accountBookForm.getItem());
+        account.setExpense(accountBookForm.getPrice());
+        account.setNote(accountBookForm.getNote());
+        accountRepository.save(account);
+    }
+
+
 }
