@@ -12,6 +12,12 @@
     <form action="#" th:action="@{/account-book/new}" th:object="${registerInfo}" method="post">
         <ul>
             <li>
+                <input type="radio" th:field="*{priceType}" value="income">
+                <label th:text="収入"/>
+                <input type="radio" th:field="*{priceType}" value="expense">
+                <label th:text="支出"/>
+            </li>
+            <li>
                 <span>日付</span>
                 <span>
                 <input type="date" th:field="*{itemDate}"/>
