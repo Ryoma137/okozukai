@@ -177,7 +177,7 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-get-find-all.sql")
-    @DisplayName("")
+    @DisplayName("登録された収支一覧を日付の降順（日付が重なる場合は登録順）で表示するかの確認")
     void testCallGetFindAllFunction() {
 
         var actual = accountBookService.getFindAll();
