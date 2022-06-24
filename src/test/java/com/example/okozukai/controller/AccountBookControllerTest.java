@@ -1,7 +1,6 @@
 package com.example.okozukai.controller;
 
 import com.example.okozukai.form.AccountBookForm;
-import com.example.okozukai.service.AccountBookService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ class AccountBookControllerTest {
 
     @Test
     @DisplayName("radio buttonで支出を選択している時、収入情報を登録するメソッドが呼ばれる")
-    void testCallRegisterIncomeMethodWhenSelectedIncome() {
+    void testCallRegisterIncomeFunctionWhenSelectedIncome() {
 
         var accountBookForm = new AccountBookForm();
         accountBookForm.setPriceType("income");
@@ -37,7 +36,7 @@ class AccountBookControllerTest {
 
     @Test
     @DisplayName("radio buttonで支出を選択している時、支出情報を登録するメソッドが呼ばれる")
-    void testCallRegisterExpenseMethodWhenSelectedIncome() {
+    void testCallRegisterExpenseFunctionWhenSelectedIncome() {
 
         var accountBookForm = new AccountBookForm();
         accountBookForm.setPriceType("expense");
@@ -48,7 +47,7 @@ class AccountBookControllerTest {
 
         accountBookController.registerInfo(accountBookForm);
 
-        assertEquals("expense", accountBookForm.getPriceType(), "priceTypeの値がincomeであること確認");
+        assertEquals("expense", accountBookForm.getPriceType(), "priceRadioの値がincomeであること確認");
 
     }
 }
