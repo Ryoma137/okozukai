@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Top Page</title>
+</head>
+<div class="title-container">
+    <h1>Top Page</h1>
+</div>
+
+<table>
+    <thread>
+        <tr>
+           <th>日付</th>
+            <th>内容</th>
+            <th>収入</th>
+            <th>支出</th>
+            <th>備考</th>
+        </tr>
+    </thread>
+    <tbody th:each="dbData : ${DBData}" th:object=${account}>
+        <td th:text="*{itemDate}"></td>
+        <td th:text="*{item}"></td>
+        <td th:text="*{income}"></td>
+        <td th:text="*{expense}"></td>
+       <td th:text="*{note}"></td>
+    </tbody>
+</table>
+
+
+</body>
+</html>
+
+
+
+
+
