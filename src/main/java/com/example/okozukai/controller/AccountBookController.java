@@ -25,9 +25,9 @@ public class AccountBookController {
     @PostMapping("/account-book/new")
     public String registerInfo(@ModelAttribute("registerInfo") AccountBookForm accountBookForm) {
 
-        if (accountBookForm.getPriceRadio().equals("income")) {
+        if (accountBookForm.getPriceType().equals("income")) {
             accountBookService.registerIncome(accountBookForm);
-        } else if (accountBookForm.getPriceRadio().equals("expense")) {
+        } else if (accountBookForm.getPriceType().equals("expense")) {
             accountBookService.registerExpense(accountBookForm);
         }
         return "/new";
