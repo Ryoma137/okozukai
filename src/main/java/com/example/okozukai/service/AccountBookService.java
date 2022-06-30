@@ -6,8 +6,6 @@ import com.example.okozukai.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -41,8 +39,7 @@ public class AccountBookService {
 
     public List<Account> getFindAll() {
         var dataFromDB = accountRepository.findAll();
-        dataFromDB.sort(Comparator.comparing(Account::getItemDate).reversed());
-
+        dataFromDB.sort(Comparator.comparing(Account::getItemDate).thenComparing(Account::getId).reversed());
         return dataFromDB;
     }
 
