@@ -176,7 +176,7 @@ class AccountBookServiceTest {
     }
 
     @Test
-    @Sql("/test-get-find-all.sql")
+    @Sql("/testCallGetFindAllFunction.sql")
     @DisplayName("登録された収支一覧を日付の降順（日付が重なる場合は登録順）で表示するかの確認")
     void testCallGetFindAllFunction() {
 
@@ -197,23 +197,23 @@ class AccountBookServiceTest {
         assertEquals(900, actual.get(1).getExpense(), "取得したデータが日付の降順に並んでいるかを確認");
         assertEquals("Thai Cuisine", actual.get(1).getNote(), "取得したデータが日付の降順に並んでいるかを確認");
 
-        assertEquals(Date.valueOf("2022-05-03"), actual.get(2).getItemDate(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals("iPhone", actual.get(2).getItem(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals(130000, actual.get(2).getIncome(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals(140000, actual.get(2).getExpense(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals("iPhone 13 Pro", actual.get(2).getNote(), "取得したデータの日付が重複している時、登録順になっているかを確認");
+        assertEquals(Date.valueOf("2022-05-03"), actual.get(2).getItemDate(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals("iPad", actual.get(2).getItem(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals(0, actual.get(2).getIncome(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals(140000, actual.get(2).getExpense(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals("iPad Pro", actual.get(2).getNote(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
 
-        assertEquals(Date.valueOf("2022-05-03"), actual.get(3).getItemDate(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals("MacBook", actual.get(3).getItem(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals(0, actual.get(3).getIncome(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals(180000, actual.get(3).getExpense(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals("MacBook Pro", actual.get(3).getNote(), "取得したデータの日付が重複している時、登録順になっているかを確認");
+        assertEquals(Date.valueOf("2022-05-03"), actual.get(3).getItemDate(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals("MacBook", actual.get(3).getItem(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals(0, actual.get(3).getIncome(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals(180000, actual.get(3).getExpense(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals("MacBook Pro", actual.get(3).getNote(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
 
-        assertEquals(Date.valueOf("2022-05-03"), actual.get(4).getItemDate(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals("iPad", actual.get(4).getItem(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals(0, actual.get(4).getIncome(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals(140000, actual.get(4).getExpense(), "取得したデータの日付が重複している時、登録順になっているかを確認");
-        assertEquals("iPad Pro", actual.get(4).getNote(), "取得したデータの日付が重複している時、登録順になっているかを確認");
+        assertEquals(Date.valueOf("2022-05-03"), actual.get(4).getItemDate(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals("iPhone", actual.get(4).getItem(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals(130000, actual.get(4).getIncome(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals(140000, actual.get(4).getExpense(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
+        assertEquals("iPhone 13 Pro", actual.get(4).getNote(), "取得したデータの日付が重複している時、登録順(idの降順)に並んでいるかを確認");
 
         assertEquals(Date.valueOf("2022-01-20"), actual.get(5).getItemDate(), "取得したデータが日付の降順に並んでいるかを確認");
         assertEquals("T-Shirts", actual.get(5).getItem(), "取得したデータが日付の降順に並んでいるかを確認");
