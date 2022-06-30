@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Top Page</title>
+</head>
+<div class="title-container">
+    <h1>おこずかい帳</h1>
+</div>
+
+<table>
+    <thread>
+        <tr>
+            <th>日付</th>
+            <th>内容</th>
+            <th>収入</th>
+            <th>支出</th>
+            <th>備考</th>
+        </tr>
+    </thread>
+    <tbody>
+    <tr th:each="data : ${dbData}">
+        <td th:text="${data.itemDate}"></td>
+        <td th:text="${data.item}"></td>
+        <td th:text="${data.income}"></td>
+        <td th:text="${data.expense}"></td>
+        <td th:text="${data.note}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+
+
+
+
+
