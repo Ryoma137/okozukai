@@ -50,8 +50,6 @@ public class AccountBookService {
         int totalIncome = dataFromDB.stream().mapToInt(Account::getIncome).sum();
         int netWorth = totalIncome - totalExpense;
 
-        if (netWorth < 0){ netWorth = 0;}
-
         return netWorth;
     }
 }

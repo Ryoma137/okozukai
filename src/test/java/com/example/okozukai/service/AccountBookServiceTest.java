@@ -231,64 +231,38 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-schema-not-data-exist.sql")
-    @DisplayName("DBにデータが存在しない時、残高が0になる")
+    @DisplayName("DBにデータが存在しない時、収支の合計金額の値が0になる")
     void testGetTotalPriceWhenDataNotExistInDB() {
 
-        var actual = accountBookService.getFindAll();
-        var totalIncome = actual.stream().mapToInt(Account::getIncome).sum();
-        var totalExpense = actual.stream().mapToInt(Account::getExpense).sum();
-
-        assertEquals(0, totalIncome, "DBに保存されている収入の合計金額が0であることの確認");
-        assertEquals(0, totalExpense, "DBに保存されている支出の合計金額が0であることの確認");
-        assertEquals(0, accountBookService.getTotalPrice(), "DBに保存されている収出の合計金額が計算されていることの確認");
+        var actual =  accountBookService.getTotalPrice();
+        assertEquals(0, actual, "DBに保存されている収出の合計金額が計算されていることの確認");
     }
 
     @Test
     @Sql("/test-getTotalPrice.sql")
-    @DisplayName("収出の計算結果が1の時、残高が1になる")
+    @DisplayName("収出の合計計算の結果がプラスの時、収支の合計金額の値がプラスの値になる")
     void testGetTotalPriceWhenNetWorthIsPlus() {
 
-        var actual = accountBookService.getFindAll();
-        var totalIncome = actual.stream().mapToInt(Account::getIncome).sum();
-        var totalExpense = actual.stream().mapToInt(Account::getExpense).sum();
-
-        assertEquals(3500, totalIncome, "DBに保存されている収入の合計金額が0であることの確認");
-        assertEquals(3499, totalExpense, "DBに保存されている支出の合計金額が0であることの確認");
-        assertEquals(1, accountBookService.getTotalPrice(), "DBに保存されている収出の合計金額が計算されていることの確認");
+        var actual = accountBookService.getTotalPrice();
+        assertEquals(1, actual, "DBに保存されている収出の合計金額がプラスであることの確認");
     }
 
     @Test
     @Sql("/test-getTotalPriceMinus.sql")
-    @DisplayName("収出の計算結果が-1の時、残高が0になる")
+    @DisplayName("収出の合計計算の結果がマイナスの時、収支の合計金額の値がマイナスの値になる")
     void testGetTotalPriceWhenNetWorthIsMinus() {
 
-        var actual = accountBookService.getFindAll();
-
-        var totalIncome = actual.stream().mapToInt(Account::getIncome).sum();
-        var totalExpense = actual.stream().mapToInt(Account::getExpense).sum();
-        var netWorth = totalIncome - totalExpense;
-
-        assertEquals(3500, totalIncome, "DBに保存されている収入の合計金額が計算されていることの確認");
-        assertEquals(3501, totalExpense, "DBに保存されている支出の合計金額が計算されていることの確認");
-        assertEquals(-1, netWorth, "DBに保存されている収出の合計金額がマイナスであることの確認");
-        assertEquals(0, accountBookService.getTotalPrice(), "DBに保存されている収出の合計金額がマイナスの時、合計金額が0になるかを確認");
+        var actual = accountBookService.getTotalPrice();
+        assertEquals(-1, actual, "DBに保存されている収出の合計金額がマイナスであることの確認");
     }
 
     @Test
     @Sql("/test-getTotalPriceZero.sql")
-    @DisplayName("収出の計算結果が0の時、残高が0になる")
+    @DisplayName("収出の合計計算の結果が0の時、収支の合計金額の値が0になる")
     void testGetTotalPriceWhenNetWorthIsZero() {
 
-        var actual = accountBookService.getFindAll();
-
-        var totalIncome = actual.stream().mapToInt(Account::getIncome).sum();
-        var totalExpense = actual.stream().mapToInt(Account::getExpense).sum();
-        var netWorth = totalIncome - totalExpense;
-
-        assertEquals(6000, totalIncome, "DBに保存されている収入の合計金額が計算されていることの確認");
-        assertEquals(6000, totalExpense, "DBに保存されている支出の合計金額が計算されていることの確認");
-        assertEquals(0, netWorth, "DBに保存されている収出の合計金額が0であることの確認");
-        assertEquals(0, accountBookService.getTotalPrice(), "DBに保存されている収出の合計金額が0の時、合計金額が0になるかを確認");
+        var actual = accountBookService.getTotalPrice();
+        assertEquals(0, actual, "DBに保存されている収出の合計金額が0であることの確認");
     }
 
 }
