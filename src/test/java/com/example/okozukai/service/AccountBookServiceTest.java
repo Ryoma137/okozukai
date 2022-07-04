@@ -231,7 +231,7 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-schema-not-data-exist.sql")
-    @DisplayName("DBにデータが存在しない時、残高の値が0になる")
+    @DisplayName("DBにデータが存在しない時、収支の合計金額の値が0になる")
     void testGetTotalPriceWhenDataNotExistInDB() {
 
         var actual =  accountBookService.getTotalPrice();
@@ -240,7 +240,7 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-getTotalPrice.sql")
-    @DisplayName("収出の計算結果がプラスの時、残高がプラスの値になる")
+    @DisplayName("収出の合計計算の結果がプラスの時、収支の合計金額の値がプラスの値になる")
     void testGetTotalPriceWhenNetWorthIsPlus() {
 
         var actual = accountBookService.getTotalPrice();
@@ -249,7 +249,7 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-getTotalPriceMinus.sql")
-    @DisplayName("収出の計算結果がマイナスの時、残高がマイナスの値になる")
+    @DisplayName("収出の合計計算の結果がマイナスの時、収支の合計金額の値がマイナスの値になる")
     void testGetTotalPriceWhenNetWorthIsMinus() {
 
         var actual = accountBookService.getTotalPrice();
@@ -258,7 +258,7 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-getTotalPriceZero.sql")
-    @DisplayName("収出の計算結果が0の時、残高の値が0になる")
+    @DisplayName("収出の合計計算の結果が0の時、収支の合計金額の値が0になる")
     void testGetTotalPriceWhenNetWorthIsZero() {
 
         var actual = accountBookService.getTotalPrice();
