@@ -30,7 +30,7 @@ public class AccountBookController {
         } else if (accountBookForm.getPriceType().equals("expense")) {
             accountBookService.registerExpense(accountBookForm);
         }
-        return "/new";
+        return "redirect:/account-book";
     }
 
     @GetMapping("/account-book")
