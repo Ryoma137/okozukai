@@ -259,7 +259,7 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-getTotalPriceMinus.sql")
-    @DisplayName("収出の計算結果が-1の時、残高が0になる")
+    @DisplayName("収出の計算結果が-1の時、残高がマイナスになる")
     void testGetTotalPriceWhenNetWorthIsMinus() {
 
         var actual = accountBookService.getFindAll();
@@ -271,7 +271,7 @@ class AccountBookServiceTest {
         assertEquals(3500, totalIncome, "DBに保存されている収入の合計金額が計算されていることの確認");
         assertEquals(3501, totalExpense, "DBに保存されている支出の合計金額が計算されていることの確認");
         assertEquals(-1, netWorth, "DBに保存されている収出の合計金額がマイナスであることの確認");
-        assertEquals(0, accountBookService.getTotalPrice(), "DBに保存されている収出の合計金額がマイナスの時、合計金額が0になるかを確認");
+        assertEquals(-1, accountBookService.getTotalPrice(), "DBに保存されている収出の合計金額がマイナスの時、合計金額が0になるかを確認");
     }
 
     @Test
