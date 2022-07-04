@@ -43,4 +43,13 @@ public class AccountBookService {
         return dataFromDB;
     }
 
+    public int getTotalPrice(){
+
+        var dataFromDB = accountRepository.findAll();
+        int totalExpense = dataFromDB.stream().mapToInt(Account::getExpense).sum();
+        int totalIncome = dataFromDB.stream().mapToInt(Account::getIncome).sum();
+        int netWorth = totalIncome - totalExpense;
+
+        return netWorth;
+    }
 }

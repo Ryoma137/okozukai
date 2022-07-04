@@ -228,4 +228,41 @@ class AccountBookServiceTest {
         assertEquals("Uniqlo T-Shirt", actual.get(5).getNote(), "取得したデータが日付の降順に並んでいるかを確認");
 
     }
+
+    @Test
+    @Sql("/test-schema-not-data-exist.sql")
+    @DisplayName("DBにデータが存在しない時、収支の合計金額の値が0になる")
+    void testGetTotalPriceWhenDataNotExistInDB() {
+
+        var actual =  accountBookService.getTotalPrice();
+        assertEquals(0, actual, "DBに保存されている収出の合計金額が計算されていることの確認");
+    }
+
+    @Test
+    @Sql("/test-getTotalPrice.sql")
+    @DisplayName("収出の合計計算の結果がプラスの時、収支の合計金額の値がプラスの値になる")
+    void testGetTotalPriceWhenNetWorthIsPlus() {
+
+        var actual = accountBookService.getTotalPrice();
+        assertEquals(1, actual, "DBに保存されている収出の合計金額がプラスであることの確認");
+    }
+
+    @Test
+    @Sql("/test-getTotalPriceMinus.sql")
+    @DisplayName("収出の合計計算の結果がマイナスの時、収支の合計金額の値がマイナスの値になる")
+    void testGetTotalPriceWhenNetWorthIsMinus() {
+
+        var actual = accountBookService.getTotalPrice();
+        assertEquals(-1, actual, "DBに保存されている収出の合計金額がマイナスであることの確認");
+    }
+
+    @Test
+    @Sql("/test-getTotalPriceZero.sql")
+    @DisplayName("収出の合計計算の結果が0の時、収支の合計金額の値が0になる")
+    void testGetTotalPriceWhenNetWorthIsZero() {
+
+        var actual = accountBookService.getTotalPrice();
+        assertEquals(0, actual, "DBに保存されている収出の合計金額が0であることの確認");
+    }
+
 }

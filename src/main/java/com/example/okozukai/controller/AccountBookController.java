@@ -37,7 +37,9 @@ public class AccountBookController {
     public String getTopPage(Model model) {
 
         var dataFromDB = accountBookService.getFindAll();
+        var netWorth = accountBookService.getTotalPrice();
         model.addAttribute("dbData", dataFromDB);
+        model.addAttribute("netWorth", netWorth);
         return "/index";
     }
 
