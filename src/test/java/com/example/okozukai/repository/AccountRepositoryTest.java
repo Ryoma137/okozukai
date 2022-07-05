@@ -129,6 +129,38 @@ class AccountRepositoryTest {
 
     }
 
+    @Sql("/test-schema.sql")
+    @Test
+    @DisplayName("与えられたデータのキーと一致するデータがDBに存在する時、DBにデータが追加されず更新されているかの確認")
+    void testUpdateWhenDataContainsSameKeyWithGivenData() {
+
+        var original = accountRepository.findAll();
+
+        var account = new Account();
+        account.setId(1L);
+        account.setItemDate(Date.valueOf("2022-03-01"));
+        account.setItem("testItem");
+        account.setExpense(1000);
+        account.setIncome(1500);
+        account.setNote("testNote");
+
+        accountRepository.save(account);
+
+        var actual = accountRepository.findAll();
+
+        assertEquals(original.size(), actual.size(), "データを与えた後と与える前のDBに保存されているデータ数が同じ事の確認");
+
+        var accountValueWithMaxId = actual.stream().max(Comparator.comparing(Account::getId)).orElseGet(Assertions::fail);
+        assertNotEquals(account, accountValueWithMaxId, "与えられたデータでデータが新規に追加されていない事を確認");
+
+        assertNotEquals(original, actual, "データを与えた後と与える前のDBに保存されているデータの中身が異なる事を確認");
+
+        var diffWithActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
+        var diffWithOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
+        assertNotEquals(diffWithActual, diffWithOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+    }
+
+
     @Sql("/test-schema-not-data-exist.sql")
     @Test
     @DisplayName("DBのテーブル内にデータが存在しない時、空の配列を取得することを確認")
@@ -179,4 +211,6 @@ class AccountRepositoryTest {
         assertTrue(actual.contains(account3), "DBに保存されているデータが取得できている");
 
     }
+
+
 }
