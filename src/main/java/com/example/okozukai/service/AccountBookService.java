@@ -5,6 +5,7 @@ import com.example.okozukai.form.AccountBookForm;
 import com.example.okozukai.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +44,7 @@ public class AccountBookService {
         return dataFromDB;
     }
 
-    public int getTotalPrice(){
+    public int getTotalPrice() {
 
         var dataFromDB = accountRepository.findAll();
         int totalExpense = dataFromDB.stream().mapToInt(Account::getExpense).sum();
@@ -51,5 +52,27 @@ public class AccountBookService {
         int netWorth = totalIncome - totalExpense;
 
         return netWorth;
+    }
+
+    public void updateIncome(@PathVariable Long id, AccountBookForm accountBookForm) {
+
+        var account = new Account();
+        account.setId(accountRepository.findById(id).orElseThrow().getId());
+        account.setItemDate(accountBookForm.getItemDate());
+        account.setItem(accountBookForm.getItem());
+        account.setIncome(accountBookForm.getPrice());
+        account.setNote(accountBookForm.getNote());
+        accountRepository.save(account);
+    }
+
+    public void updateExpense(@PathVariable Long id, AccountBookForm accountBookForm) {
+
+        var account = new Account();
+        account.setId(accountRepository.findById(id).orElseThrow().getId());
+        account.setItemDate(accountBookForm.getItemDate());
+        account.setItem(accountBookForm.getItem());
+        account.setExpense(accountBookForm.getPrice());
+        account.setNote(accountBookForm.getNote());
+        accountRepository.save(account);
     }
 }

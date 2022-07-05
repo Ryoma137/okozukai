@@ -234,7 +234,7 @@ class AccountBookServiceTest {
     @DisplayName("DBにデータが存在しない時、収支の合計金額の値が0になる")
     void testGetTotalPriceWhenDataNotExistInDB() {
 
-        var actual =  accountBookService.getTotalPrice();
+        var actual = accountBookService.getTotalPrice();
         assertEquals(0, actual, "DBに保存されている収出の合計金額が計算されていることの確認");
     }
 
@@ -264,5 +264,126 @@ class AccountBookServiceTest {
         var actual = accountBookService.getTotalPrice();
         assertEquals(0, actual, "DBに保存されている収出の合計金額が0であることの確認");
     }
+
+
+    @Test
+    @Sql("/test-schema.sql")
+    @DisplayName("与えられたデータの収入の値と既存データの収入の値が異なる時、データが更新される")
+    void testUpdateIncomeWhenGivenIncomeValueIsDifferenceFromExistOne() {
+
+        var original = accountRepository.findAll();
+
+        var accountBookForm = new AccountBookForm();
+        accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
+        accountBookForm.setItem("testItem");
+        accountBookForm.setPrice(1000);
+        accountBookForm.setNote("testNote");
+
+        accountBookService.updateIncome(2L, accountBookForm);
+
+        var actual = accountRepository.findAll();
+        assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
+        assertNotEquals(original, actual, "更新前と更新後のデータが一致しないことの確認");
+
+        var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
+        var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
+        assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+
+        assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
+        assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
+        assertEquals(1000, diffFromOriginal.get(0).getIncome(), "与えられたデータで収入が変更されている事を確認");
+        assertEquals("testNote", diffFromOriginal.get(0).getNote(), "与えられたデータで備考が変更されている事を確認");
+    }
+
+    @Test
+    @Sql("/test-schema.sql")
+    @DisplayName("与えられたデータの収入の値と既存データの収入の値が同じ時、データが更新される")
+    void testUpdateIncomeWhenGivenIncomeValueIsSameWithExistOne() {
+
+        var original = accountRepository.findAll();
+
+        var accountBookForm = new AccountBookForm();
+        accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
+        accountBookForm.setItem("testItem");
+        accountBookForm.setPrice(130000);
+        accountBookForm.setNote("testNote");
+
+        accountBookService.updateIncome(2L, accountBookForm);
+
+        var actual = accountRepository.findAll();
+        assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
+        assertNotEquals(original, actual, "更新前と更新後のデータが一致しないことの確認");
+
+        var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
+        var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
+        assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+
+        assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
+        assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
+        assertEquals(130000, diffFromOriginal.get(0).getIncome(), "与えられたデータで収入が変更されている事を確認");
+        assertEquals("testNote", diffFromOriginal.get(0).getNote(), "与えられたデータで備考が変更されている事を確認");
+    }
+
+
+    @Test
+    @Sql("/test-schema.sql")
+    @DisplayName("与えられたデータの支出の値と既存データの支出の値が異なる時、データが更新される")
+    void testUpdateExpenseWhenGivenExpenseValueIsDifferenceFromExistOne() {
+
+        var original = accountRepository.findAll();
+
+        var accountBookForm = new AccountBookForm();
+        accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
+        accountBookForm.setItem("testItem");
+        accountBookForm.setPrice(1000);
+        accountBookForm.setNote("testNote");
+
+        accountBookService.updateExpense(3L, accountBookForm);
+
+        var actual = accountRepository.findAll();
+        assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
+        assertNotEquals(original, actual, "更新前と更新後のデータが一致しないことの確認");
+
+        var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
+        var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
+        assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+
+        assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
+        assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
+        assertEquals(1000, diffFromOriginal.get(0).getExpense(), "与えられたデータで支出が変更されている事を確認");
+        assertEquals("testNote", diffFromOriginal.get(0).getNote(), "与えられたデータで備考が変更されている事を確認");
+
+    }
+
+    @Test
+    @Sql("/test-schema.sql")
+    @DisplayName("与えられたデータの支出の値と既存データの支出の値が同じ時、データが更新される")
+    void testUpdateExpenseWhenGivenExpenseValueIsSameWithExistOne() {
+
+        var original = accountRepository.findAll();
+
+        var accountBookForm = new AccountBookForm();
+        accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
+        accountBookForm.setItem("testItem");
+        accountBookForm.setPrice(900);
+        accountBookForm.setNote("testNote");
+
+        accountBookService.updateExpense(3L, accountBookForm);
+
+        var actual = accountRepository.findAll();
+        assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
+        assertNotEquals(original, actual, "更新前と更新後のデータが一致しないことの確認");
+
+        var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
+        var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
+        assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+
+        assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
+        assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
+        assertEquals(900, diffFromOriginal.get(0).getExpense(), "与えられたデータで支出が変更されている事を確認");
+        assertEquals("testNote", diffFromOriginal.get(0).getNote(), "与えられたデータで備考が変更されている事を確認");
+
+    }
+
 
 }
