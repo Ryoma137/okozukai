@@ -274,12 +274,13 @@ class AccountBookServiceTest {
         var original = accountRepository.findAll();
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setId(2L);
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateIncome(2L, accountBookForm);
+        accountBookService.updateIncome(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -305,12 +306,13 @@ class AccountBookServiceTest {
         var original = accountRepository.findAll();
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setId(2L);
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
-        accountBookForm.setPrice(130000);
+        accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateIncome(2L, accountBookForm);
+        accountBookService.updateIncome(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -323,7 +325,7 @@ class AccountBookServiceTest {
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
-        assertEquals(130000, diffFromOriginal.get(0).getIncome(), "与えられたデータで収入が変更されている事を確認");
+        assertEquals(1000, diffFromOriginal.get(0).getIncome(), "与えられたデータで収入が変更されている事を確認");
         assertEquals(0, diffFromOriginal.get(0).getExpense(), "収入のデータが与えられた時、支出は0に変更されている事を確認");
         assertEquals("testNote", diffFromOriginal.get(0).getNote(), "与えられたデータで備考が変更されている事を確認");
     }
@@ -337,12 +339,13 @@ class AccountBookServiceTest {
         var original = accountRepository.findAll();
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setId(3L);
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateExpense(3L, accountBookForm);
+        accountBookService.updateExpense(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -369,12 +372,13 @@ class AccountBookServiceTest {
         var original = accountRepository.findAll();
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setId(3L);
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
-        accountBookForm.setPrice(900);
+        accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateExpense(3L, accountBookForm);
+        accountBookService.updateExpense(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -388,7 +392,7 @@ class AccountBookServiceTest {
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
         assertEquals(0, diffFromOriginal.get(0).getIncome(), "支出のデータが与えられた時、収入値は0に変更されている事を確認");
-        assertEquals(900, diffFromOriginal.get(0).getExpense(), "与えられたデータで支出が変更されている事を確認");
+        assertEquals(1000, diffFromOriginal.get(0).getExpense(), "与えられたデータで支出が変更されている事を確認");
         assertEquals("testNote", diffFromOriginal.get(0).getNote(), "与えられたデータで備考が変更されている事を確認");
 
     }

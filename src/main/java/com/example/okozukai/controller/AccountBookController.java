@@ -48,14 +48,14 @@ public class AccountBookController {
     }
 
     @PutMapping("/account-book/update/{id}")
-    @ResponseBody
-    public String updateInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
+    public String updateInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo")  AccountBookForm accountBookForm) {
 
+        accountBookForm.setId(id);
 
         if (accountBookForm.getPriceType().equals("income")) {
-            accountBookService.updateIncome(id, accountBookForm);
+            accountBookService.updateIncome(accountBookForm);
         } else if (accountBookForm.getPriceType().equals("expense")) {
-            accountBookService.updateExpense(id, accountBookForm);
+            accountBookService.updateExpense(accountBookForm);
         }
         return "redirect:/account-book";
     }

@@ -54,10 +54,10 @@ public class AccountBookService {
         return netWorth;
     }
 
-    public void updateIncome(Long id, AccountBookForm accountBookForm) {
+    public void updateIncome(AccountBookForm accountBookForm) {
 
         var account = new Account();
-        account.setId(accountRepository.findById(id).orElseThrow().getId());
+        account.setId(accountBookForm.getId());
         account.setItemDate(accountBookForm.getItemDate());
         account.setItem(accountBookForm.getItem());
         account.setIncome(accountBookForm.getPrice());
@@ -66,10 +66,10 @@ public class AccountBookService {
         accountRepository.save(account);
     }
 
-    public void updateExpense(Long id, AccountBookForm accountBookForm) {
+    public void updateExpense(AccountBookForm accountBookForm) {
 
         var account = new Account();
-        account.setId(accountRepository.findById(id).orElseThrow().getId());
+        account.setId(accountBookForm.getId());
         account.setItemDate(accountBookForm.getItemDate());
         account.setItem(accountBookForm.getItem());
         account.setIncome(0);

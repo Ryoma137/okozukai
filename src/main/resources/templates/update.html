@@ -9,7 +9,7 @@
 </div>
 
 <div class="ul-align-center">
-    <form action="#" th:action="@{/account-book/}" th:object="${updateInfo}" th:method="put">
+    <form action="#" th:action="@{/account-book/update/{id}(id=*{id})}" th:object="${updateInfo}" th:method="put">
         <ul>
             <li>
                 <input type="radio" th:field="*{priceType}" value="income">
