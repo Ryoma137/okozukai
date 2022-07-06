@@ -61,6 +61,7 @@ public class AccountBookService {
         account.setItemDate(accountBookForm.getItemDate());
         account.setItem(accountBookForm.getItem());
         account.setIncome(accountBookForm.getPrice());
+        account.setExpense(0);
         account.setNote(accountBookForm.getNote());
         accountRepository.save(account);
     }
@@ -71,6 +72,7 @@ public class AccountBookService {
         account.setId(accountRepository.findById(id).orElseThrow().getId());
         account.setItemDate(accountBookForm.getItemDate());
         account.setItem(accountBookForm.getItem());
+        account.setIncome(0);
         account.setExpense(accountBookForm.getPrice());
         account.setNote(accountBookForm.getNote());
         accountRepository.save(account);
