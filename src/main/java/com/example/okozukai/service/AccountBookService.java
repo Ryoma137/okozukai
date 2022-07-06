@@ -54,7 +54,7 @@ public class AccountBookService {
         return netWorth;
     }
 
-    public void updateIncome(@PathVariable Long id, AccountBookForm accountBookForm) {
+    public void updateIncome(Long id, AccountBookForm accountBookForm) {
 
         var account = new Account();
         account.setId(accountRepository.findById(id).orElseThrow().getId());
@@ -65,7 +65,7 @@ public class AccountBookService {
         accountRepository.save(account);
     }
 
-    public void updateExpense(@PathVariable Long id, AccountBookForm accountBookForm) {
+    public void updateExpense(Long id, AccountBookForm accountBookForm) {
 
         var account = new Account();
         account.setId(accountRepository.findById(id).orElseThrow().getId());

@@ -288,6 +288,7 @@ class AccountBookServiceTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
@@ -317,6 +318,7 @@ class AccountBookServiceTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
@@ -347,6 +349,7 @@ class AccountBookServiceTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
@@ -377,6 +380,7 @@ class AccountBookServiceTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
+        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");

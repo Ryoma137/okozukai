@@ -6,9 +6,7 @@ import com.example.okozukai.service.AccountBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AccountBookController {
@@ -43,4 +41,22 @@ public class AccountBookController {
         return "/index";
     }
 
+    @GetMapping("/account-book/update/{id}")
+    public String getUpdatePage(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
+
+        return "/update";
+    }
+
+    @PutMapping("/account-book/update/{id}")
+    @ResponseBody
+    public String updateInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
+
+
+        if (accountBookForm.getPriceType().equals("income")) {
+            accountBookService.updateIncome(id, accountBookForm);
+        } else if (accountBookForm.getPriceType().equals("expense")) {
+            accountBookService.updateExpense(id, accountBookForm);
+        }
+        return "redirect:/account-book";
+    }
 }
