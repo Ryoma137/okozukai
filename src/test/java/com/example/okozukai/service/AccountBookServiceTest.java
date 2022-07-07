@@ -401,7 +401,9 @@ class AccountBookServiceTest {
     @Sql("/test-schema-with-specifiedID.sql")
     @DisplayName("指定したIDに紐づいているデータが取得されていることを確認")
     void testGetById() {
+
         var data = accountBookService.getById(1L);
+
         assertEquals(1L, data.getId());
         assertEquals(Date.valueOf("2022-01-20"), data.getItemDate(), "IDに紐づいている日付のデータが取得できていることの確認");
         assertEquals("T-Shirts", data.getItem(), "IDに紐づいている内容のデータが取得できていることの確認");
