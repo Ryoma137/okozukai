@@ -5,7 +5,6 @@ import com.example.okozukai.form.AccountBookForm;
 import com.example.okozukai.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Comparator;
 import java.util.List;
@@ -77,4 +76,9 @@ public class AccountBookService {
         account.setNote(accountBookForm.getNote());
         accountRepository.save(account);
     }
+
+    public Account getById(long id) {
+        return accountRepository.findById(id).orElseThrow();
+    }
+
 }

@@ -176,7 +176,7 @@ class AccountBookServiceTest {
     }
 
     @Test
-    @Sql("/testCallGetFindAllFunction.sql")
+    @Sql("/test-schema-with-specifiedID.sql")
     @DisplayName("登録された収支一覧を日付の降順（日付が重なる場合は登録順）で表示するかの確認")
     void testCallGetFindAllFunction() {
 
@@ -289,7 +289,7 @@ class AccountBookServiceTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
-        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
+        assertEquals(1, diffFromOriginal.size(), "更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
@@ -321,7 +321,7 @@ class AccountBookServiceTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
-        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
+        assertEquals(1, diffFromOriginal.size(), "更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
@@ -354,7 +354,7 @@ class AccountBookServiceTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
-        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
+        assertEquals(1, diffFromOriginal.size(), "更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
@@ -387,7 +387,7 @@ class AccountBookServiceTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
-        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
+        assertEquals(1, diffFromOriginal.size(), "更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
@@ -397,5 +397,19 @@ class AccountBookServiceTest {
 
     }
 
+    @Test
+    @Sql("/test-schema-with-specifiedID.sql")
+    @DisplayName("指定したIDに紐づいているデータが取得されていることを確認")
+    void testGetById() {
 
+        var data = accountBookService.getById(1L);
+
+        assertEquals(1L, data.getId());
+        assertEquals(Date.valueOf("2022-01-20"), data.getItemDate(), "IDに紐づいている日付のデータが取得できていることの確認");
+        assertEquals("T-Shirts", data.getItem(), "IDに紐づいている内容のデータが取得できていることの確認");
+        assertEquals(1000, data.getIncome(), "IDに紐づいている収入のデータが取得できていることの確認");
+        assertEquals(1500, data.getExpense(), "IDに紐づいている支出のデータが取得できていることの確認");
+        assertEquals("Uniqlo T-Shirt", data.getNote(), "IDに紐づいている備考のデータが取得できていることの確認");
+
+    }
 }

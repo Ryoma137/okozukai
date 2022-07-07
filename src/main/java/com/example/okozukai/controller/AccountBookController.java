@@ -44,13 +44,25 @@ public class AccountBookController {
     @GetMapping("/account-book/update/{id}")
     public String getUpdatePage(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
 
+        var recordData = accountBookService.getById(id);
+
+        if (recordData.getExpense() == 0) {
+            accountBookForm.setPrice(recordData.getIncome());
+        } else if (recordData.getIncome() == 0) {
+            accountBookForm.setPrice(recordData.getExpense());
+        }
+
+        accountBookForm.setItem(recordData.getItem());
+        accountBookForm.setItemDate(recordData.getItemDate());
+        accountBookForm.setNote(recordData.getNote());
         return "/update";
     }
 
     @PutMapping("/account-book/update/{id}")
-    public String updateInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo")  AccountBookForm accountBookForm) {
+    public String updateInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
 
-        accountBookForm.setId(id);
+        var data = accountBookService.getById(id);
+        accountBookForm.setId(data.getId());
 
         if (accountBookForm.getPriceType().equals("income")) {
             accountBookService.updateIncome(accountBookForm);
