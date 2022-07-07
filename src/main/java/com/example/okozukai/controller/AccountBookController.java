@@ -76,10 +76,31 @@ public class AccountBookController {
     }
 
     @GetMapping("/account-book/delete/{id}")
-    public String getDeletePage(@PathVariable("id") Long id, Model model) {
+    public String getDeletePage(@PathVariable("id") Long id, @ModelAttribute("deleteInfo") AccountBookForm accountBookForm) {
 
-        accountBookService.deleteBySpecifiedId(id);
+        var recordData = accountBookService.getById(id);
+
+        if (recordData.getExpense() == 0) {
+            accountBookForm.setPrice(recordData.getIncome());
+            accountBookForm.setPriceType("income");
+        } else if (recordData.getIncome() == 0) {
+            accountBookForm.setPrice(recordData.getExpense());
+            accountBookForm.setPriceType("expense");
+        }
+
+        accountBookForm.setItem(recordData.getItem());
+        accountBookForm.setItemDate(recordData.getItemDate());
+        accountBookForm.setNote(recordData.getNote());
+
         return "/delete";
     }
+
+    @DeleteMapping("/account-book/delete/{id}")
+    public String deleteInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
+
+        accountBookService.deleteBySpecifiedId(id);
+        return "redirect:/account-book";
+    }
+
 
 }

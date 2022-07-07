@@ -157,7 +157,7 @@ class AccountRepositoryTest {
         var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
         var diffFromOriginal = actual.stream().filter(account1 -> original.stream().noneMatch(before -> before.equals(account1))).toList();
         assertNotEquals(diffFromActual, diffFromOriginal, "データを与えた後と与える前で値が異なるデータを比較し、値が同じでない事を確認");
-        assertEquals(1, diffFromOriginal.size(),"更新されたデータが1件のみである事の確認");
+        assertEquals(1, diffFromOriginal.size(), "更新されたデータが1件のみである事の確認");
 
         assertEquals(Date.valueOf("2022-03-01"), diffFromOriginal.get(0).getItemDate(), "与えられたデータで日付が変更されている事を確認");
         assertEquals("testItem", diffFromOriginal.get(0).getItem(), "与えられたデータで内容が変更されている事を確認");
@@ -219,5 +219,26 @@ class AccountRepositoryTest {
 
     }
 
+    @Test
+    @Sql("/test-schema-with-specifiedID.sql")
+    @DisplayName("指定したIDに紐づいているデータが削除されていることを確認")
+    void testDeleteByIdWhenDataExistsInDB() {
 
+        var original = accountRepository.findAll();
+        accountRepository.deleteById(1L);
+
+        var actual = accountRepository.findAll();
+
+        assertNotEquals(original.size(), actual.size(), "データが与えれた後と前でDBに保存されているデータ数が違う事の確認");
+
+        var diffFromActual = original.stream().filter(account1 -> actual.stream().noneMatch(before -> before.equals(account1))).toList();
+        assertEquals(1, diffFromActual.size(), "削除されたデータが1件のみである事の確認");
+
+        assertEquals(Date.valueOf("2022-01-20"), diffFromActual.get(0).getItemDate(), "与えられたIDに紐ずいたデータの日付が削除されている事を確認");
+        assertEquals("T-Shirts", diffFromActual.get(0).getItem(), "与えられたIDに紐ずいたデータの内容が削除されている事を確認");
+        assertEquals(1000, diffFromActual.get(0).getIncome(), "与えられたIDに紐ずいたデータの収入が削除されている事を確認");
+        assertEquals(1500, diffFromActual.get(0).getExpense(), "与えられたIDに紐ずいたデータの支出が削除されている事を確認");
+        assertEquals("Uniqlo T-Shirt", diffFromActual.get(0).getNote(), "与えられたIDに紐ずいたデータの備考が削除されている事を確認");
+
+    }
 }

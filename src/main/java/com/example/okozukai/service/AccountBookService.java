@@ -81,4 +81,6 @@ public class AccountBookService {
         return accountRepository.findById(id).orElseThrow();
     }
 
+    public void deleteBySpecifiedId(long id) { accountRepository.deleteById(id); }
+
 }
