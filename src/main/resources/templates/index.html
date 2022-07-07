@@ -32,6 +32,12 @@
         <td th:text="${data.income}"></td>
         <td th:text="${data.expense}"></td>
         <td th:text="${data.note}"></td>
+
+        <td>
+            <a th:href="@{/account-book/update/{id}(id=${data.id})}">
+                更新
+            </a>
+        </td>
     </tr>
     </tbody>
 </table>
