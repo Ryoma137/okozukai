@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete</title>
+</head>
+<div class="title-container">
+    <h1>Delete</h1>
+</div>
+
+<div class="ul-align-center">
+    <form action="#" th:action="@{/account-book/delete/{id}(id=*{id})}" th:object="${deleteInfo}" th:method="delete">
+        <ul>
+            <li>
+                <input type="radio" th:field="*{priceType}" value="income" disabled>
+                <label th:text="収入"/>
+                <input type="radio" th:field="*{priceType}" value="expense" disabled>
+                <label th:text="支出"/>
+            </li>
+            <li>
+                <span>日付</span>
+                <span>
+                <input type="date" th:field="*{itemDate}" disabled/>
+            </span>
+            </li>
+            <li>
+                <span>内容</span>
+                <span>
+                <input type="text" th:field="*{item}" name="name" disabled/>
+            </span>
+            </li>
+            <li>
+                <span>金額</span>
+                <span>
+                <input type="number" th:field="*{price}" required minlength="1" disabled/>
+            </span>
+            </li>
+            <li>
+                <span>備考</span>
+                <span>
+                <input type="text" th:field="*{note}" disabled/>
+            </span>
+            </li>
+        </ul>
+        <button type="submit">削除</button>
+    </form>
+    <a th:href="@{/account-book/}">一覧に戻る</a>
+</div>
+
+</body>
+</html>
+
