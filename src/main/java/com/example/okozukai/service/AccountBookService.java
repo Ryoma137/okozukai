@@ -77,4 +77,9 @@ public class AccountBookService {
         account.setNote(accountBookForm.getNote());
         accountRepository.save(account);
     }
+
+    public Account getById(long id){
+        return accountRepository.findById(id).orElseThrow();
+    }
+
 }
