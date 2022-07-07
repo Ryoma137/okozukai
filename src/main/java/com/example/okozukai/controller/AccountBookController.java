@@ -48,8 +48,10 @@ public class AccountBookController {
 
         if (recordData.getExpense() == 0) {
             accountBookForm.setPrice(recordData.getIncome());
+            accountBookForm.setPriceType("income");
         } else if (recordData.getIncome() == 0) {
             accountBookForm.setPrice(recordData.getExpense());
+            accountBookForm.setPriceType("expense");
         }
 
         accountBookForm.setItem(recordData.getItem());
@@ -64,6 +66,7 @@ public class AccountBookController {
         var data = accountBookService.getById(id);
         accountBookForm.setId(data.getId());
 
+
         if (accountBookForm.getPriceType().equals("income")) {
             accountBookService.updateIncome(accountBookForm);
         } else if (accountBookForm.getPriceType().equals("expense")) {
@@ -71,4 +74,12 @@ public class AccountBookController {
         }
         return "redirect:/account-book";
     }
+
+    @GetMapping("/account-book/delete/{id}")
+    public String getDeletePage(@PathVariable("id") Long id, Model model) {
+
+        accountBookService.deleteBySpecifiedId(id);
+        return "/delete";
+    }
+
 }
