@@ -221,8 +221,34 @@ class AccountRepositoryTest {
 
     @Test
     @Sql("/test-schema-with-specifiedID.sql")
+    @DisplayName("DBにデータが存在するとき、指定したIDに紐づいているデータが取得されていることを確認")
+    void testFindByIdWhenDataExistsInDB() {
+
+        var actual = accountRepository.findById(1L);
+
+        assertEquals(1L, actual.get().getId(),"指定したIDが取得できていることの確認");
+        assertEquals(Date.valueOf("2022-01-20"), actual.get().getItemDate(), "IDに紐づいている日付のデータが取得できていることの確認");
+        assertEquals("T-Shirts", actual.get().getItem(), "IDに紐づいている内容のデータが取得できていることの確認");
+        assertEquals(1000, actual.get().getIncome(), "IDに紐づいている収入のデータが取得できていることの確認");
+        assertEquals(1500, actual.get().getExpense(), "IDに紐づいている支出のデータが取得できていることの確認");
+        assertEquals("Uniqlo T-Shirt", actual.get().getNote(), "IDに紐づいている備考のデータが取得できていることの確認");
+
+    }
+
+    @Test
+    @Sql("/test-schema-not-data-exist.sql")
+    @DisplayName("DBにデータが存在しないとき、空のデータを取得する事を確認")
+    void testFindByIdWhenDataNotExistsInDB() {
+
+        var actual = accountRepository.findById(1L);
+        assertTrue(actual.isEmpty(), "DBにデータが存在しないとき、取得したデータがemptyである事を確認");
+
+    }
+
+    @Test
+    @Sql("/test-schema-with-specifiedID.sql")
     @DisplayName("指定したIDに紐づいているデータが削除されていることを確認")
-    void testDeleteByIdWhenDataExistsInDB() {
+    void testDeleteById() {
 
         var original = accountRepository.findAll();
         accountRepository.deleteById(1L);
