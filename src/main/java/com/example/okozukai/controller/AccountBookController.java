@@ -23,11 +23,8 @@ public class AccountBookController {
     @PostMapping("/account-book/new")
     public String registerInfo(@ModelAttribute("registerInfo") AccountBookForm accountBookForm) {
 
-        if (accountBookForm.getPriceType().equals("income")) {
-            accountBookService.registerIncome(accountBookForm);
-        } else if (accountBookForm.getPriceType().equals("expense")) {
-            accountBookService.registerExpense(accountBookForm);
-        }
+        accountBookService.registerInfo(accountBookForm);
+
         return "redirect:/account-book";
     }
 
@@ -38,59 +35,30 @@ public class AccountBookController {
         var netWorth = accountBookService.getTotalPrice();
         model.addAttribute("dbData", dataFromDB);
         model.addAttribute("netWorth", netWorth);
+
         return "/index";
     }
 
     @GetMapping("/account-book/update/{id}")
     public String getUpdatePage(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
 
-        var recordData = accountBookService.getBySpecifiedId(id);
+        accountBookService.getUpdatePage(id, accountBookForm);
 
-        if (recordData.getExpense() == 0) {
-            accountBookForm.setPrice(recordData.getIncome());
-            accountBookForm.setPriceType("income");
-        } else if (recordData.getIncome() == 0) {
-            accountBookForm.setPrice(recordData.getExpense());
-            accountBookForm.setPriceType("expense");
-        }
-
-        accountBookForm.setItem(recordData.getItem());
-        accountBookForm.setItemDate(recordData.getItemDate());
-        accountBookForm.setNote(recordData.getNote());
         return "/update";
     }
 
     @PutMapping("/account-book/update/{id}")
     public String updateInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
 
-        var data = accountBookService.getBySpecifiedId(id);
-        accountBookForm.setId(data.getId());
+        accountBookService.updateInfo(id, accountBookForm);
 
-
-        if (accountBookForm.getPriceType().equals("income")) {
-            accountBookService.updateIncome(accountBookForm);
-        } else if (accountBookForm.getPriceType().equals("expense")) {
-            accountBookService.updateExpense(accountBookForm);
-        }
         return "redirect:/account-book";
     }
 
     @GetMapping("/account-book/delete/{id}")
     public String getDeletePage(@PathVariable("id") Long id, @ModelAttribute("deleteInfo") AccountBookForm accountBookForm) {
 
-        var recordData = accountBookService.getBySpecifiedId(id);
-
-        if (recordData.getExpense() == 0) {
-            accountBookForm.setPrice(recordData.getIncome());
-            accountBookForm.setPriceType("income");
-        } else if (recordData.getIncome() == 0) {
-            accountBookForm.setPrice(recordData.getExpense());
-            accountBookForm.setPriceType("expense");
-        }
-
-        accountBookForm.setItem(recordData.getItem());
-        accountBookForm.setItemDate(recordData.getItemDate());
-        accountBookForm.setNote(recordData.getNote());
+        accountBookService.getDeletePage(id, accountBookForm);
 
         return "/delete";
     }
@@ -99,8 +67,7 @@ public class AccountBookController {
     public String deleteInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
 
         accountBookService.deleteBySpecifiedId(id);
+
         return "redirect:/account-book";
     }
-
-
 }
