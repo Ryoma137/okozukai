@@ -226,7 +226,7 @@ class AccountRepositoryTest {
 
         var actual = accountRepository.findById(1L);
 
-        assertEquals(1L, actual.get().getId(),"指定したIDが取得できていることの確認");
+        assertEquals(1L, actual.get().getId(), "指定したIDが取得できていることの確認");
         assertEquals(Date.valueOf("2022-01-20"), actual.get().getItemDate(), "IDに紐づいている日付のデータが取得できていることの確認");
         assertEquals("T-Shirts", actual.get().getItem(), "IDに紐づいている内容のデータが取得できていることの確認");
         assertEquals(1000, actual.get().getIncome(), "IDに紐づいている収入のデータが取得できていることの確認");

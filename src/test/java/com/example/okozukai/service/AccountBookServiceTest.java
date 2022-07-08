@@ -36,12 +36,13 @@ class AccountBookServiceTest {
         assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setPriceType("income");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.registerIncome(accountBookForm);
+        accountBookService.registerInfo(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
@@ -66,12 +67,13 @@ class AccountBookServiceTest {
         assertEquals(0, original.size(), "DBのテーブル内にデータが存在しない事を確認");
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setPriceType("income");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.registerIncome(accountBookForm);
+        accountBookService.registerInfo(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(1, actual.size(), "レコード追加後のDBのテーブル内に存在するデータ数を確認");
@@ -92,12 +94,13 @@ class AccountBookServiceTest {
         assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setPriceType("expense");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.registerExpense(accountBookForm);
+        accountBookService.registerInfo(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
@@ -122,12 +125,13 @@ class AccountBookServiceTest {
         assertEquals(0, original.size(), "DBのテーブル内にデータが存在しない事を確認");
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setPriceType("expense");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.registerExpense(accountBookForm);
+        accountBookService.registerInfo(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(1, actual.size(), "レコード追加後のDBのテーブル内に存在するデータ数を確認");
@@ -150,12 +154,13 @@ class AccountBookServiceTest {
         Map<Long, Account> originalMap = original.stream().collect(Collectors.toMap(Account::getId, account -> account));
 
         var accountBookForm = new AccountBookForm();
+        accountBookForm.setPriceType("income");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.registerIncome(accountBookForm);
+        accountBookService.registerInfo(accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(4, actual.size(), "レコード追加後のDBに保存されているデータ数の確認");
@@ -274,13 +279,13 @@ class AccountBookServiceTest {
         var original = accountRepository.findAll();
 
         var accountBookForm = new AccountBookForm();
-        accountBookForm.setId(2L);
+        accountBookForm.setPriceType("income");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateIncome(accountBookForm);
+        accountBookService.updateInfo(2L,accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -306,13 +311,13 @@ class AccountBookServiceTest {
         var original = accountRepository.findAll();
 
         var accountBookForm = new AccountBookForm();
-        accountBookForm.setId(2L);
+        accountBookForm.setPriceType("income");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateIncome(accountBookForm);
+        accountBookService.updateInfo(2L,accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -339,13 +344,13 @@ class AccountBookServiceTest {
         var original = accountRepository.findAll();
 
         var accountBookForm = new AccountBookForm();
-        accountBookForm.setId(3L);
+        accountBookForm.setPriceType("expense");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateExpense(accountBookForm);
+        accountBookService.updateInfo(3L,accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -372,13 +377,13 @@ class AccountBookServiceTest {
         var original = accountRepository.findAll();
 
         var accountBookForm = new AccountBookForm();
-        accountBookForm.setId(3L);
+        accountBookForm.setPriceType("expense");
         accountBookForm.setItemDate(Date.valueOf("2022-03-01"));
         accountBookForm.setItem("testItem");
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateExpense(accountBookForm);
+        accountBookService.updateInfo(3L,accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -404,7 +409,7 @@ class AccountBookServiceTest {
 
         var actual = accountBookService.getBySpecifiedId(1L);
 
-        assertEquals(1L, actual.getId(),"指定したIDが取得できていることの確認");
+        assertEquals(1L, actual.getId(), "指定したIDが取得できていることの確認");
         assertEquals(Date.valueOf("2022-01-20"), actual.getItemDate(), "IDに紐づいている日付のデータが取得できていることの確認");
         assertEquals("T-Shirts", actual.getItem(), "IDに紐づいている内容のデータが取得できていることの確認");
         assertEquals(1000, actual.getIncome(), "IDに紐づいている収入のデータが取得できていることの確認");
