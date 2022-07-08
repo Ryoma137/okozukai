@@ -42,7 +42,7 @@ public class AccountBookController {
     @GetMapping("/account-book/update/{id}")
     public String getUpdatePage(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
 
-        accountBookService.getUpdatePage(id, accountBookForm);
+        accountBookService.getPageInfo(id, accountBookForm);
 
         return "/update";
     }
@@ -58,7 +58,7 @@ public class AccountBookController {
     @GetMapping("/account-book/delete/{id}")
     public String getDeletePage(@PathVariable("id") Long id, @ModelAttribute("deleteInfo") AccountBookForm accountBookForm) {
 
-        accountBookService.getDeletePage(id, accountBookForm);
+        accountBookService.getPageInfo(id, accountBookForm);
 
         return "/delete";
     }

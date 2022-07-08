@@ -76,24 +76,8 @@ public class AccountBookService {
         accountRepository.deleteById(id);
     }
 
-    public void getUpdatePage(long id, AccountBookForm accountBookForm) {
+    public void getPageInfo(long id, AccountBookForm accountBookForm) {
 
-        var recordData = getBySpecifiedId(id);
-
-        if (recordData.getExpense() == 0) {
-            accountBookForm.setPrice(recordData.getIncome());
-            accountBookForm.setPriceType("income");
-        } else if (recordData.getIncome() == 0) {
-            accountBookForm.setPrice(recordData.getExpense());
-            accountBookForm.setPriceType("expense");
-        }
-
-        accountBookForm.setItem(recordData.getItem());
-        accountBookForm.setItemDate(recordData.getItemDate());
-        accountBookForm.setNote(recordData.getNote());
-    }
-
-    public void getDeletePage(long id, AccountBookForm accountBookForm) {
         var recordData = getBySpecifiedId(id);
 
         if (recordData.getExpense() == 0) {
