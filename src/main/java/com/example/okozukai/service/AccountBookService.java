@@ -77,7 +77,7 @@ public class AccountBookService {
         accountRepository.save(account);
     }
 
-    public Account getById(long id) {
+    public Account getBySpecifiedId(long id) {
         return accountRepository.findById(id).orElseThrow();
     }
 

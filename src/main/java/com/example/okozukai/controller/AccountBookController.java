@@ -44,7 +44,7 @@ public class AccountBookController {
     @GetMapping("/account-book/update/{id}")
     public String getUpdatePage(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
 
-        var recordData = accountBookService.getById(id);
+        var recordData = accountBookService.getBySpecifiedId(id);
 
         if (recordData.getExpense() == 0) {
             accountBookForm.setPrice(recordData.getIncome());
@@ -63,7 +63,7 @@ public class AccountBookController {
     @PutMapping("/account-book/update/{id}")
     public String updateInfo(@PathVariable("id") Long id, @ModelAttribute("updateInfo") AccountBookForm accountBookForm) {
 
-        var data = accountBookService.getById(id);
+        var data = accountBookService.getBySpecifiedId(id);
         accountBookForm.setId(data.getId());
 
 
@@ -78,7 +78,7 @@ public class AccountBookController {
     @GetMapping("/account-book/delete/{id}")
     public String getDeletePage(@PathVariable("id") Long id, @ModelAttribute("deleteInfo") AccountBookForm accountBookForm) {
 
-        var recordData = accountBookService.getById(id);
+        var recordData = accountBookService.getBySpecifiedId(id);
 
         if (recordData.getExpense() == 0) {
             accountBookForm.setPrice(recordData.getIncome());

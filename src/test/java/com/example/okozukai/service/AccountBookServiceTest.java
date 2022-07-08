@@ -400,23 +400,23 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema-with-specifiedID.sql")
     @DisplayName("指定したIDに紐づいているデータが取得されていることを確認")
-    void testGetById() {
+    void testGetBySpecifiedIdWhenDataExistsInDB() {
 
-        var data = accountBookService.getById(1L);
+        var actual = accountBookService.getBySpecifiedId(1L);
 
-        assertEquals(1L, data.getId());
-        assertEquals(Date.valueOf("2022-01-20"), data.getItemDate(), "IDに紐づいている日付のデータが取得できていることの確認");
-        assertEquals("T-Shirts", data.getItem(), "IDに紐づいている内容のデータが取得できていることの確認");
-        assertEquals(1000, data.getIncome(), "IDに紐づいている収入のデータが取得できていることの確認");
-        assertEquals(1500, data.getExpense(), "IDに紐づいている支出のデータが取得できていることの確認");
-        assertEquals("Uniqlo T-Shirt", data.getNote(), "IDに紐づいている備考のデータが取得できていることの確認");
+        assertEquals(1L, actual.getId(),"指定したIDが取得できていることの確認");
+        assertEquals(Date.valueOf("2022-01-20"), actual.getItemDate(), "IDに紐づいている日付のデータが取得できていることの確認");
+        assertEquals("T-Shirts", actual.getItem(), "IDに紐づいている内容のデータが取得できていることの確認");
+        assertEquals(1000, actual.getIncome(), "IDに紐づいている収入のデータが取得できていることの確認");
+        assertEquals(1500, actual.getExpense(), "IDに紐づいている支出のデータが取得できていることの確認");
+        assertEquals("Uniqlo T-Shirt", actual.getNote(), "IDに紐づいている備考のデータが取得できていることの確認");
 
     }
 
     @Test
     @Sql("/test-schema-with-specifiedID.sql")
     @DisplayName("指定したIDに紐づいているデータが削除されていることを確認")
-    void testDeleteBySpecifiedIdWhenDataExistsInDB() {
+    void testDeleteBySpecifiedId() {
 
         var original = accountBookService.getFindAll();
         accountBookService.deleteBySpecifiedId(1L);
