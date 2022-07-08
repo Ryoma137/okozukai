@@ -285,7 +285,7 @@ class AccountBookServiceTest {
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateInfo(2L,accountBookForm);
+        accountBookService.updateInfo(2L, accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -317,7 +317,7 @@ class AccountBookServiceTest {
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateInfo(2L,accountBookForm);
+        accountBookService.updateInfo(2L, accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -350,7 +350,7 @@ class AccountBookServiceTest {
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateInfo(3L,accountBookForm);
+        accountBookService.updateInfo(3L, accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -383,7 +383,7 @@ class AccountBookServiceTest {
         accountBookForm.setPrice(1000);
         accountBookForm.setNote("testNote");
 
-        accountBookService.updateInfo(3L,accountBookForm);
+        accountBookService.updateInfo(3L, accountBookForm);
 
         var actual = accountRepository.findAll();
         assertEquals(original.size(), actual.size(), "データが与えられた後、DBのテーブル内に保存されているデータ数が変わっていない事の確認");
@@ -438,6 +438,87 @@ class AccountBookServiceTest {
         assertEquals(1000, diffFromActual.get(0).getIncome(), "与えられたIDに紐ずいたデータの収入が削除されている事を確認");
         assertEquals(1500, diffFromActual.get(0).getExpense(), "与えられたIDに紐ずいたデータの支出が削除されている事を確認");
         assertEquals("Uniqlo T-Shirt", diffFromActual.get(0).getNote(), "与えられたIDに紐ずいたデータの備考が削除されている事を確認");
+
+    }
+
+    @Test
+    @Sql("/test-schema-for-getPage.sql")
+    @DisplayName("編集ページに遷移した際にメイン画面で選択したカラムの情報が入力欄に入力されている事の確認")
+    void testGetUpdatePage() {
+
+        var updateIncome = accountBookService.getBySpecifiedId(1L);
+
+        var incomeAccountBookForm = new AccountBookForm();
+
+        incomeAccountBookForm.setItemDate(updateIncome.getItemDate());
+        incomeAccountBookForm.setPrice(updateIncome.getIncome());
+        incomeAccountBookForm.setItem(updateIncome.getItem());
+        incomeAccountBookForm.setNote(updateIncome.getNote());
+
+        accountBookService.getUpdatePage(1L, incomeAccountBookForm);
+
+        assertEquals("income", incomeAccountBookForm.getPriceType(), "編集ページに遷移した際にPriceTypeが収入でセットされているかの確認");
+        assertEquals(Date.valueOf("2022-01-20"), incomeAccountBookForm.getItemDate(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
+        assertEquals("T-Shirts", incomeAccountBookForm.getItem(), "編集ページに遷移した際に選択したカラムの内容データが入力欄に入力されているかの確認");
+        assertEquals(1000, incomeAccountBookForm.getPrice(), "編集ページに遷移した際に選択したカラムの収入データが入力欄に入力されているかの確認");
+        assertEquals("Uniqlo T-Shirt", incomeAccountBookForm.getNote(), "編集ページに遷移した際に選択したカラムの備考データが入力欄に入力されているかの確認");
+
+        var updateExpense = accountBookService.getBySpecifiedId(2L);
+        var expenseAccountBookForm = new AccountBookForm();
+
+        expenseAccountBookForm.setItemDate(updateExpense.getItemDate());
+        expenseAccountBookForm.setPrice(updateExpense.getExpense());
+        expenseAccountBookForm.setItem(updateExpense.getItem());
+        expenseAccountBookForm.setNote(updateExpense.getNote());
+
+        accountBookService.getUpdatePage(2L, expenseAccountBookForm);
+
+        assertEquals("expense", expenseAccountBookForm.getPriceType(), "編集ページに遷移した際にPriceTypeが支出でセットされているかの確認");
+        assertEquals(Date.valueOf("2022-05-03"), expenseAccountBookForm.getItemDate(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
+        assertEquals("iPhone", expenseAccountBookForm.getItem(), "編集ページに遷移した際に選択したカラムの内容データが入力欄に入力されているかの確認");
+        assertEquals(140000, expenseAccountBookForm.getPrice(), "編集ページに遷移した際に選択したカラムの支出データが入力欄に入力されているかの確認");
+        assertEquals("iPhone 13 Pro", expenseAccountBookForm.getNote(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
+
+    }
+
+    @Test
+    @Sql("/test-schema-for-getPage.sql")
+    @DisplayName("削除ページに遷移した際にメイン画面で選択したカラムの情報が入力欄に入力されている事の確認")
+    void testGetDeletePage() {
+
+        var updateIncome = accountBookService.getBySpecifiedId(1L);
+
+        var incomeAccountBookForm = new AccountBookForm();
+
+        incomeAccountBookForm.setItemDate(updateIncome.getItemDate());
+        incomeAccountBookForm.setPrice(updateIncome.getIncome());
+        incomeAccountBookForm.setItem(updateIncome.getItem());
+        incomeAccountBookForm.setNote(updateIncome.getNote());
+
+        accountBookService.getDeletePage(1L, incomeAccountBookForm);
+
+        assertEquals("income", incomeAccountBookForm.getPriceType(), "編集ページに遷移した際にPriceTypeが収入でセットされているかの確認");
+        assertEquals(Date.valueOf("2022-01-20"), incomeAccountBookForm.getItemDate(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
+        assertEquals("T-Shirts", incomeAccountBookForm.getItem(), "編集ページに遷移した際に選択したカラムの内容データが入力欄に入力されているかの確認");
+        assertEquals(1000, incomeAccountBookForm.getPrice(), "編集ページに遷移した際に選択したカラムの収入データが入力欄に入力されているかの確認");
+        assertEquals("Uniqlo T-Shirt", incomeAccountBookForm.getNote(), "編集ページに遷移した際に選択したカラムの備考データが入力欄に入力されているかの確認");
+
+
+        var updateExpense = accountBookService.getBySpecifiedId(2L);
+        var expenseAccountBookForm = new AccountBookForm();
+
+        expenseAccountBookForm.setItemDate(updateExpense.getItemDate());
+        expenseAccountBookForm.setPrice(updateExpense.getExpense());
+        expenseAccountBookForm.setItem(updateExpense.getItem());
+        expenseAccountBookForm.setNote(updateExpense.getNote());
+
+        accountBookService.getDeletePage(2L, expenseAccountBookForm);
+
+        assertEquals("expense", expenseAccountBookForm.getPriceType(), "編集ページに遷移した際にPriceTypeが支出でセットされているかの確認");
+        assertEquals(Date.valueOf("2022-05-03"), expenseAccountBookForm.getItemDate(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
+        assertEquals("iPhone", expenseAccountBookForm.getItem(), "編集ページに遷移した際に選択したカラムの内容データが入力欄に入力されているかの確認");
+        assertEquals(140000, expenseAccountBookForm.getPrice(), "編集ページに遷移した際に選択したカラムの支出データが入力欄に入力されているかの確認");
+        assertEquals("iPhone 13 Pro", expenseAccountBookForm.getNote(), "編集ページに遷移した際に選択したカラムの備考データが入力欄に入力されているかの確認");
 
     }
 }
