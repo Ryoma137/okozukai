@@ -30,7 +30,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema.sql")
     @DisplayName("DBに既存データが存在する時、引数で受け取った情報が収入情報としてレコードに追加される")
-    void testRegisterIncomeDataPassedThroughParameterWhenRecordsExistInDB() {
+    void testRegisterInfoWhichAddGivenIncomeWhenRecordsExistInDB() {
 
         var original = accountRepository.findAll();
         assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
@@ -61,7 +61,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema-not-data-exist.sql")
     @DisplayName("DBのテーブル内にデータが存在しない時、引数で受け取った情報が収入情報としてレコードに追加される")
-    void testRegisterIncomeDataPassedThroughParameterWhenRecordNotExistsInDB() {
+    void testRegisterInfoWhichAddGivenIncomeWhenRecordsNotExistInDB() {
 
         var original = accountRepository.findAll();
         assertEquals(0, original.size(), "DBのテーブル内にデータが存在しない事を確認");
@@ -88,7 +88,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema.sql")
     @DisplayName("DBに既存データが存在する時、引数で受け取った情報が支出情報としてレコードに追加される")
-    void testRegisterExpenseDataPassedThroughParameterWhenRecordsExistInDB() {
+    void testRegisterInfoWhichAddGivenExpenseWhenRecordsExistInDB() {
 
         var original = accountRepository.findAll();
         assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
@@ -119,7 +119,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema-not-data-exist.sql")
     @DisplayName("DBのテーブル内にデータが存在しない時、引数で受け取った情報が支出情報として格納されてレコードに追加される")
-    void testRegisterExpenseDataPassedThroughParameterWhenRecordNotExistsInDB() {
+    void testRegisterInfoWhichAddGivenExpenseWhenRecordsNotExistInDB() {
 
         var original = accountRepository.findAll();
         assertEquals(0, original.size(), "DBのテーブル内にデータが存在しない事を確認");
@@ -145,8 +145,8 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-schema.sql")
-    @DisplayName("registerIncome_既存データあり_データが追加され既存データに変更なし")
-    void testRegisterIncome1() {
+    @DisplayName("DBのテーブル内にデータが存在しない時、引数で受け取った情報が収入情報としてレコードに追加される(割り込みタスク)")
+    void testRegisterInfoAdditionalTask() {
 
         var original = accountRepository.findAll();
         assertEquals(3, original.size(), "レコード追加前のDBに保存されているデータ数の確認");
@@ -183,7 +183,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema-with-specifiedID.sql")
     @DisplayName("登録された収支一覧を日付の降順（日付が重なる場合は登録順）で表示するかの確認")
-    void testCallGetFindAllFunction() {
+    void testGetFindAll() {
 
         var actual = accountBookService.getFindAll();
 
@@ -274,7 +274,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema.sql")
     @DisplayName("与えられたデータの収入の値と既存データの収入の値が異なる時、データが更新される")
-    void testUpdateIncomeWhenGivenIncomeValueIsDifferenceFromExistOne() {
+    void testUpdateInfoWhenGivenIncomeValueIsDifferenceFromExistOne() {
 
         var original = accountRepository.findAll();
 
@@ -306,7 +306,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema.sql")
     @DisplayName("与えられたデータの収入の値と既存データの収入の値が同じ時、データが更新される")
-    void testUpdateIncomeWhenGivenIncomeValueIsSameWithExistOne() {
+    void testUpdateInfoWhenGivenIncomeValueIsSameWithExistOne() {
 
         var original = accountRepository.findAll();
 
@@ -339,7 +339,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema.sql")
     @DisplayName("与えられたデータの支出の値と既存データの支出の値が異なる時、データが更新される")
-    void testUpdateExpenseWhenGivenExpenseValueIsDifferenceFromExistOne() {
+    void testUpdateInfoWhenGivenExpenseValueIsDifferenceFromExistOne() {
 
         var original = accountRepository.findAll();
 
@@ -372,7 +372,7 @@ class AccountBookServiceTest {
     @Test
     @Sql("/test-schema.sql")
     @DisplayName("与えられたデータの支出の値と既存データの支出の値が同じ時、データが更新される")
-    void testUpdateExpenseWhenGivenExpenseValueIsSameWithExistOne() {
+    void testUpdateInfoWhenGivenExpenseValueIsSameWithExistOne() {
 
         var original = accountRepository.findAll();
 
@@ -443,8 +443,8 @@ class AccountBookServiceTest {
 
     @Test
     @Sql("/test-schema-for-getPage.sql")
-    @DisplayName("編集ページに遷移した際にメイン画面で選択したカラムの情報が入力欄に入力されている事の確認")
-    void testGetUpdatePage() {
+    @DisplayName("メイン画面で選択したデータの情報が遷移先のページの入力欄に入力されている事の確認")
+    void testGetPageInfo() {
 
         var updateIncome = accountBookService.getBySpecifiedId(1L);
 
@@ -455,7 +455,7 @@ class AccountBookServiceTest {
         incomeAccountBookForm.setItem(updateIncome.getItem());
         incomeAccountBookForm.setNote(updateIncome.getNote());
 
-        accountBookService.getUpdatePage(1L, incomeAccountBookForm);
+        accountBookService.getPageInfo(1L, incomeAccountBookForm);
 
         assertEquals("income", incomeAccountBookForm.getPriceType(), "編集ページに遷移した際にPriceTypeが収入でセットされているかの確認");
         assertEquals(Date.valueOf("2022-01-20"), incomeAccountBookForm.getItemDate(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
@@ -471,54 +471,13 @@ class AccountBookServiceTest {
         expenseAccountBookForm.setItem(updateExpense.getItem());
         expenseAccountBookForm.setNote(updateExpense.getNote());
 
-        accountBookService.getUpdatePage(2L, expenseAccountBookForm);
+        accountBookService.getPageInfo(2L, expenseAccountBookForm);
 
         assertEquals("expense", expenseAccountBookForm.getPriceType(), "編集ページに遷移した際にPriceTypeが支出でセットされているかの確認");
         assertEquals(Date.valueOf("2022-05-03"), expenseAccountBookForm.getItemDate(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
         assertEquals("iPhone", expenseAccountBookForm.getItem(), "編集ページに遷移した際に選択したカラムの内容データが入力欄に入力されているかの確認");
         assertEquals(140000, expenseAccountBookForm.getPrice(), "編集ページに遷移した際に選択したカラムの支出データが入力欄に入力されているかの確認");
         assertEquals("iPhone 13 Pro", expenseAccountBookForm.getNote(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
-
-    }
-
-    @Test
-    @Sql("/test-schema-for-getPage.sql")
-    @DisplayName("削除ページに遷移した際にメイン画面で選択したカラムの情報が入力欄に入力されている事の確認")
-    void testGetDeletePage() {
-
-        var updateIncome = accountBookService.getBySpecifiedId(1L);
-
-        var incomeAccountBookForm = new AccountBookForm();
-
-        incomeAccountBookForm.setItemDate(updateIncome.getItemDate());
-        incomeAccountBookForm.setPrice(updateIncome.getIncome());
-        incomeAccountBookForm.setItem(updateIncome.getItem());
-        incomeAccountBookForm.setNote(updateIncome.getNote());
-
-        accountBookService.getDeletePage(1L, incomeAccountBookForm);
-
-        assertEquals("income", incomeAccountBookForm.getPriceType(), "編集ページに遷移した際にPriceTypeが収入でセットされているかの確認");
-        assertEquals(Date.valueOf("2022-01-20"), incomeAccountBookForm.getItemDate(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
-        assertEquals("T-Shirts", incomeAccountBookForm.getItem(), "編集ページに遷移した際に選択したカラムの内容データが入力欄に入力されているかの確認");
-        assertEquals(1000, incomeAccountBookForm.getPrice(), "編集ページに遷移した際に選択したカラムの収入データが入力欄に入力されているかの確認");
-        assertEquals("Uniqlo T-Shirt", incomeAccountBookForm.getNote(), "編集ページに遷移した際に選択したカラムの備考データが入力欄に入力されているかの確認");
-
-
-        var updateExpense = accountBookService.getBySpecifiedId(2L);
-        var expenseAccountBookForm = new AccountBookForm();
-
-        expenseAccountBookForm.setItemDate(updateExpense.getItemDate());
-        expenseAccountBookForm.setPrice(updateExpense.getExpense());
-        expenseAccountBookForm.setItem(updateExpense.getItem());
-        expenseAccountBookForm.setNote(updateExpense.getNote());
-
-        accountBookService.getDeletePage(2L, expenseAccountBookForm);
-
-        assertEquals("expense", expenseAccountBookForm.getPriceType(), "編集ページに遷移した際にPriceTypeが支出でセットされているかの確認");
-        assertEquals(Date.valueOf("2022-05-03"), expenseAccountBookForm.getItemDate(), "編集ページに遷移した際に選択したカラムの日付データが入力欄に入力されているかの確認");
-        assertEquals("iPhone", expenseAccountBookForm.getItem(), "編集ページに遷移した際に選択したカラムの内容データが入力欄に入力されているかの確認");
-        assertEquals(140000, expenseAccountBookForm.getPrice(), "編集ページに遷移した際に選択したカラムの支出データが入力欄に入力されているかの確認");
-        assertEquals("iPhone 13 Pro", expenseAccountBookForm.getNote(), "編集ページに遷移した際に選択したカラムの備考データが入力欄に入力されているかの確認");
 
     }
 }
